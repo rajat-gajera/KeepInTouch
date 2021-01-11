@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "850220043946",
+    "project_id": "keepintouch-d335e",
+    "storage_bucket": "keepintouch-d335e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:850220043946:android:cdc134545d12efcec48ad3",
+        "android_client_info": {
+          "package_name": "com.example.keepintouch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "850220043946-8tf2tjdqt4al74o7v13sr580pjlfc7b9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBph4k1GEWT51lIzTE7BJAW_2Wt1qZZJOM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "850220043946-8tf2tjdqt4al74o7v13sr580pjlfc7b9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
