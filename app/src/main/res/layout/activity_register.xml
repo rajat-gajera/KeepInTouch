@@ -12,21 +12,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
-        android:hint="Email"
-        />
+        android:hint="@string/email"
+         />
     <EditText
         android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:hint="Name"
+        android:hint="@string/name"
         />
     <EditText
         android:id="@+id/phonenumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="phone"
-        android:hint="Phone Number"
+        android:hint="@string/phone_number"
         />
     <EditText
 
@@ -34,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
-        android:hint="Password"
+        android:hint="@string/password"
 
         />
     <EditText
@@ -42,18 +42,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
-        android:hint="Confirm Password"
+        android:hint="@string/confirm_password"
         />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/Register_btn"
-        android:text="Register"
+        android:text="@string/register"
          />
     <TextView
         android:id="@+id/registered"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Already Registered? Login here!"
+        android:text="@string/already_registered_login_here"
          />
 </LinearLayout>
