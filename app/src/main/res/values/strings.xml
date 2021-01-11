@@ -9,4 +9,9 @@
     <string name="already_registered_login_here">Already Registered? Login here!</string>
     <string name="log_in">Log In</string>
     <string name="register_new_user">Register new User!</string>
+    <string name="servival_kit">Servival kit</string>
+    <string name="settings">Settings</string>
+    <string name="share">share</string>
+    <string name="communicate">Communicate</string>
+    <string name="groups">Groups</string>
 </resources>
