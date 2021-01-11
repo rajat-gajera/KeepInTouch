@@ -71,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void regtisterNewUser(View view) {
         startActivity(new Intent(this ,RegisterActivity.class));
-       // finish();
+        finish();
 
     }
 }

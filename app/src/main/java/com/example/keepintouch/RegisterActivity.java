@@ -102,6 +102,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                         intent.putExtra(PHONENUMBER,phonenumber);
                         startActivity(intent);
+                         finish();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -113,7 +114,12 @@ public class RegisterActivity extends AppCompatActivity {
 
             }
         });
+    mRegistered.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            startActivity(new Intent(RegisterActivity.this,LoginActivity.class));
+            finish();
+        }
+    });
     }
-
-
 }
