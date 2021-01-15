@@ -6,9 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +26,7 @@ public class RegisterActivity extends AppCompatActivity {
     TextView mRegistered;
     Button mRegisterButton;
     private FirebaseAuth mFirebaseAuth;
+    ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,12 +38,14 @@ public class RegisterActivity extends AppCompatActivity {
         mConfirmPassword = findViewById(R.id.confirm_password);
         mRegisterButton = findViewById(R.id.Register_btn);
         mRegistered= findViewById(R.id.registered);
-
+        progressBar = findViewById(R.id.progress_bar_register);
         mFirebaseAuth = FirebaseAuth.getInstance();
 
         mRegisterButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
+                progressBar.setVisibility(View.VISIBLE);
                 String name,password,email,confirmpassword,phonenumber;
                 name = mName.getText().toString().trim();
                 email =mEmail.getText().toString().trim();
@@ -52,13 +57,14 @@ public class RegisterActivity extends AppCompatActivity {
                 {
                     //Toast.makeText(getApplicationContext(),"Email Is Requiered!",Toast.LENGTH_SHORT).show();
                     mEmail.setError("Email is Requiered!");
-
+                    progressBar.setVisibility(View.GONE);
                     return;
                 }
                 if(name.length()==0)
                 {
                     //Toast.makeText(getApplicationContext(),"Name Is Requiered!",Toast.LENGTH_SHORT).show();
                     mName.setError("Name is Requiered!");
+                    progressBar.setVisibility(View.GONE);
 
                     return;
                 }
@@ -66,6 +72,7 @@ public class RegisterActivity extends AppCompatActivity {
                 {
                     //Toast.makeText(getApplicationContext(),"Phone Is Requiered!",Toast.LENGTH_SHORT).show();
                     mPhoneNumber.setError("Phone is Requiered!");
+                    progressBar.setVisibility(View.GONE);
 
                     return;
                 }
@@ -73,6 +80,7 @@ public class RegisterActivity extends AppCompatActivity {
                 {
                     //Toast.makeText(getApplicationContext(),"Password Is Requiered!",Toast.LENGTH_SHORT).show();
                     mPassword.setError("Password is Requiered!");
+                    progressBar.setVisibility(View.GONE);
 
                     return;
                 }
@@ -80,6 +88,7 @@ public class RegisterActivity extends AppCompatActivity {
                 {
                     //Toast.makeText(getApplicationContext(),"Password Is Requiered!",Toast.LENGTH_SHORT).show();
                     mPassword.setError("Password is too sort!");
+                    progressBar.setVisibility(View.GONE);
 
                     return;
                 }
@@ -90,6 +99,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                     mPassword.setError(""+password);
                     mConfirmPassword.setError(""+confirmpassword);
+                    progressBar.setVisibility(View.GONE);
 
                     return;
                 }
@@ -97,23 +107,27 @@ public class RegisterActivity extends AppCompatActivity {
                 mFirebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Toast.makeText(getApplicationContext(),"User Created",Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(RegisterActivity.this,MainActivity.class);
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getApplicationContext(), "User Created", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
 
-                        intent.putExtra(PHONENUMBER,phonenumber);
-                        startActivity(intent);
-                         finish();
+                            intent.putExtra(PHONENUMBER, phonenumber);
+                            startActivity(intent);
+                            progressBar.setVisibility(View.GONE);
+                            finish();
+                        }
+                        else
+                        {
+                            progressBar.setVisibility(View.GONE);
+                            Toast.makeText(getApplicationContext(), "Failed to Register!", Toast.LENGTH_SHORT).show();
+
+                        }
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getApplicationContext(),"Failed to Register!",Toast.LENGTH_SHORT).show();
-
                     }
-                });
+                );
+            }});
 
-            }
-        });
+
     mRegistered.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {

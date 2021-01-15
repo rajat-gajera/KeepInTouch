@@ -42,4 +42,11 @@
 
 
         />
+    <ProgressBar
+        android:id="@+id/progress_bar_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:layout_margin="12dp"
+        />
 </LinearLayout>
