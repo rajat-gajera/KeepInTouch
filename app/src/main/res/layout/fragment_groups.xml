@@ -7,28 +7,54 @@
 
     >
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/floating_btn"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="20dp"
-        android:background="@android:color/transparent"
-        android:backgroundTint="@color/white"
-        android:src="@drawable/ic_add_group"
-        app:rippleColor="@color/white"
 
-        />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/darker_gray"
-        android:padding="4dp"
+        android:padding="7dp"
         android:scrollbars="vertical" />
 
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:id="@+id/floating_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/recyclerView"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/ic_add_group"
+        android:visibility="visible"
+        app:fab_addButtonColorNormal="@color/design_default_color_primary"
+        app:fab_addButtonColorPressed="@color/black"
+        app:fab_addButtonPlusIconColor="@color/white"
+        app:fab_labelStyle="@style/custom_fab"
+        app:rippleColor="@color/white"
+        tools:visibility="visible">
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/join_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             app:fab_colorNormal="@color/black"
+            app:fab_colorPressed="@color/white"
+            app:fab_icon="@drawable/ic_join_group"
+            app:fab_size="mini"
+            app:fab_title="join Group" />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/create_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             app:fab_colorNormal="@color/black"
+            app:fab_colorPressed="@color/white"
+            app:fab_icon="@drawable/ic_add_group"
+            app:fab_size="mini"
+            app:fab_title="Create Group"
+            />
+
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
 </RelativeLayout>
