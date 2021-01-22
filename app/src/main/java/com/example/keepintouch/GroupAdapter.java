@@ -1,20 +1,23 @@
 package com.example.keepintouch;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firestore.v1.TargetOrBuilder;
+
 import java.security.acl.Group;
 import java.util.ArrayList;
 
 public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHolder> {
-
     private ArrayList<GroupItem> mGroupList;
     private OnItemClickListener mListener;
     public interface OnItemClickListener {
@@ -26,11 +29,12 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
     }
 
     public static  class GroupViewHolder extends RecyclerView.ViewHolder{
+        public  TextView mGroupName,mAdminEmail;
 
-        TextView mGroupName,mAdminName;
+
         public GroupViewHolder(@NonNull View itemView,final  OnItemClickListener listener) {
             super(itemView);
-            mAdminName =  itemView.findViewById(R.id.admin_name);
+            mAdminEmail =  itemView.findViewById(R.id.admin_email);
             mGroupName =  itemView.findViewById(R.id.group_name);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -64,8 +68,10 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
     @Override
     public void onBindViewHolder(@NonNull GroupViewHolder holder, int position) {
     GroupItem currentGroup = (GroupItem) mGroupList.get(position);
+    holder.mGroupName.setText(currentGroup.getGroupName() + ":"+currentGroup.getAdminEmail());
+    holder.mAdminEmail.setText(currentGroup.getAdminEmail());
 
-    }
+     }
 
     @Override
     public int getItemCount() {

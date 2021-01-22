@@ -16,9 +16,15 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class RegisterActivity extends AppCompatActivity {
     public static final String PHONENUMBER  = "";
@@ -27,6 +33,7 @@ public class RegisterActivity extends AppCompatActivity {
     Button mRegisterButton;
     private FirebaseAuth mFirebaseAuth;
     ProgressBar progressBar;
+    FirebaseFirestore mFirebaseFirestore;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +47,7 @@ public class RegisterActivity extends AppCompatActivity {
         mRegistered= findViewById(R.id.registered);
         progressBar = findViewById(R.id.progress_bar_register);
         mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseFirestore = FirebaseFirestore.getInstance();
 
         mRegisterButton.setOnClickListener(new View.OnClickListener() {
 
@@ -64,6 +72,14 @@ public class RegisterActivity extends AppCompatActivity {
                 {
                     //Toast.makeText(getApplicationContext(),"Name Is Requiered!",Toast.LENGTH_SHORT).show();
                     mName.setError("Name is Requiered!");
+                    progressBar.setVisibility(View.GONE);
+
+                    return;
+                }
+                if(phonenumber.length()!=10)
+                {
+                    //Toast.makeText(getApplicationContext(),"Name Is Requiered!",Toast.LENGTH_SHORT).show();
+                    mPhoneNumber.setError("Invalid Mobile Number!");
                     progressBar.setVisibility(View.GONE);
 
                     return;
@@ -108,6 +124,10 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            String date = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
+                            String time = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
+                            User user = new User(mFirebaseAuth.getCurrentUser().getUid(),name,phonenumber,email,password,date,time,"0","0");
+                            mFirebaseFirestore.collection("Users").document(user.getUserId()).set(user);
                             Toast.makeText(getApplicationContext(), "User Created", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
 

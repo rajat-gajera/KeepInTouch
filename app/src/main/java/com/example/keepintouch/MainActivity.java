@@ -9,9 +9,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
@@ -40,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         toggle.syncState();
         if(savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Groups()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new GroupsActivity()).commit();
             navigationView.setCheckedItem(R.id.groups);
 
         }
@@ -49,13 +47,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.groups:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new Groups()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new GroupsActivity()).commit();
                 break;
             case R.id.settings:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new Settings()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new SettingsActivity()).commit();
                 break;
             case R.id.servival_kit:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ServivalKit()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ServivalKitActivity()).commit();
                 break;
             case R.id.share:
                 Toast.makeText(this,"Share",Toast.LENGTH_SHORT).show();

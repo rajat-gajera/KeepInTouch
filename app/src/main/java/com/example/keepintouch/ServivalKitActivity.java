@@ -9,13 +9,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-public class Settings extends Fragment {
+public class ServivalKitActivity extends Fragment {
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-       getActivity().setTitle("Settings");
+        getActivity().setTitle("Servival Kit");
 
-        return inflater.inflate(R.layout.fragment_settings,container,false);
+
+        return inflater.inflate(R.layout.fragment_servival_kit,container,false);
+
     }
 }
