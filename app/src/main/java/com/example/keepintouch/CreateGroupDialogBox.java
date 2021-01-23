@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,7 +33,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Source;
-
+import com.example.keepintouch.GroupsActivity.*;
 import java.util.ArrayList;
 
 public class CreateGroupDialogBox extends AppCompatDialogFragment {
@@ -93,7 +94,9 @@ public class CreateGroupDialogBox extends AppCompatDialogFragment {
     }
 
     public interface DialogBoxListener {
-        void createGroup(AppCompatDialogFragment dialogFragment);
+
+
+
 
     }
 

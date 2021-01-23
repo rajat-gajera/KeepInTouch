@@ -1,6 +1,7 @@
 package com.example.keepintouch;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,9 +37,10 @@ public class GroupsActivity extends Fragment implements CreateGroupDialogBox.Dia
     private static final String TAG = "";
     private ArrayList<GroupItem> mGroupList;
     private RecyclerView mRecyclerView;
-    private GroupAdapter mAdapter;
+    public GroupAdapter mAdapter;
+    private ProgressDialog progressDialog;
 
-    private FirebaseFirestore    mFirebaseFirestore = FirebaseFirestore.getInstance();
+    private FirebaseFirestore mFirebaseFirestore = FirebaseFirestore.getInstance();
     //private FloatingActionButton fab;
     private FloatingActionButton mJoinButton, mCreateGroupButton;
 
@@ -46,21 +48,24 @@ public class GroupsActivity extends Fragment implements CreateGroupDialogBox.Dia
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         getActivity().setTitle("GroupsActivity");
-
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setCancelable(false);
+        progressDialog.setTitle("Please Wait");
+        progressDialog.setMessage("Loading...");
 
         createGroupList();
+
+
         View rootview = inflater.inflate(R.layout.fragment_groups, container, false);
         mRecyclerView = rootview.findViewById(R.id.recyclerView);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         mAdapter = new GroupAdapter(mGroupList);
-                    mRecyclerView.setAdapter(mAdapter);
-                    mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         mJoinButton = rootview.findViewById(R.id.join_button);
         mCreateGroupButton = rootview.findViewById(R.id.create_button);
-
-
 
 
         mJoinButton.setOnClickListener(new View.OnClickListener() {
@@ -74,6 +79,7 @@ public class GroupsActivity extends Fragment implements CreateGroupDialogBox.Dia
             @Override
             public void onClick(View view) {
                 OpenDialog();
+
             }
         });
 
@@ -85,61 +91,66 @@ public class GroupsActivity extends Fragment implements CreateGroupDialogBox.Dia
             }
         });
 
+        progressDialog.dismiss();
 
         return rootview;
     }
 
+
     private void OpenDialog() {
         CreateGroupDialogBox createGroupDialogBox = new CreateGroupDialogBox();
         createGroupDialogBox.show(getFragmentManager(), "Create Group");
-        mAdapter.notifyDataSetChanged();
-
 
 
     }
 
     private void createGroupList() {
+
+
+        progressDialog.show();
         mGroupList = new ArrayList<>();
-//        mGroupList.add(new GroupItem("1","esd","1","23","23"));
-//        mGroupList.add(new GroupItem("1","esd","1","23","23"));
-            mFirebaseFirestore.collection("Groups").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                @Override
-                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                    if(queryDocumentSnapshots.isEmpty())
-                    {
-                        Log.d(TAG,"onSuccess : No Grpup Found!");
-                        return;
-                    }
-                    else
-                    {
-                        List<DocumentSnapshot> dsList = queryDocumentSnapshots.getDocuments();
-                        for (DocumentSnapshot d : dsList)
-                        {
-                            GroupItem group=d.toObject(GroupItem.class);
-                            mGroupList.add(group);
-                        }
-                        mAdapter.notifyDataSetChanged();
 
+//        mFirebaseFirestore.collection("Groups").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//            @Override
+//            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                if (queryDocumentSnapshots.isEmpty()) {
+//                    Log.d(TAG, "onSuccess : No Grpup Found!");
+//                    return;
+//                } else {
+//                    List<DocumentSnapshot> dsList = queryDocumentSnapshots.getDocuments();
+//                    for (DocumentSnapshot d : dsList) {
+//                        GroupItem group = d.toObject(GroupItem.class);
+//                        mGroupList.add(group);
+//                    }
+//                    mAdapter.notifyDataSetChanged();
+//
+//                }
+//
+//            }
+//        });
+        mFirebaseFirestore.collection("Groups").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (value.isEmpty()) {
+                    Log.d(TAG, "onSuccess : No Grpup Found!");
+                    return;
+                } else {
+                    mGroupList.clear();
+                    List<DocumentSnapshot> dsList = value.getDocuments();
+                    for (DocumentSnapshot d : dsList) {
+                        GroupItem group = d.toObject(GroupItem.class);
+                        mGroupList.add(group);
                     }
-
+                    mAdapter.notifyDataSetChanged();
                 }
-            });
 
 
+                progressDialog.dismiss();
 
-
+            }
+        });
     }
 
 
-    @SuppressLint("ResourceType")
-    @Override
-    public void createGroup(AppCompatDialogFragment dialogFragment) {
 
-        String groupname, adminname;
-        groupname = dialogFragment.getString(R.id.group_name);
-        adminname = dialogFragment.getString(R.id.admin_email);
-
-        // mGroupList.add(new GroupItem(groupname,adminname));
-
-    }
 }

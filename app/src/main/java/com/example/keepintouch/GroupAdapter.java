@@ -68,8 +68,8 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
     @Override
     public void onBindViewHolder(@NonNull GroupViewHolder holder, int position) {
     GroupItem currentGroup = (GroupItem) mGroupList.get(position);
-    holder.mGroupName.setText(currentGroup.getGroupName() + ":"+currentGroup.getAdminEmail());
-    holder.mAdminEmail.setText(currentGroup.getAdminEmail());
+    holder.mGroupName.setText(currentGroup.getGroupName());
+    holder.mAdminEmail.setText(currentGroup.getCode());
 
      }
 
