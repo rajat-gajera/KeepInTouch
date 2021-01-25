@@ -32,18 +32,23 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.Source;
 import com.example.keepintouch.GroupsActivity.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CreateGroupDialogBox extends AppCompatDialogFragment {
     private EditText mGroupName;
     private TextView joinCode;
     private ImageView copyCode;
-    private DialogBoxListener listener;
+
     private FirebaseFirestore mFirebaseFirestore = FirebaseFirestore.getInstance();
     private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
+    Map<String, Object> mp= new HashMap<>();
 
+    private static ArrayList<String> clist;
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -83,8 +88,23 @@ public class CreateGroupDialogBox extends AppCompatDialogFragment {
                 if (GroupName.length() == 0) {
                     Toast.makeText(getContext(), "Group Name Should Not be Empty!", Toast.LENGTH_SHORT).show();
                 } else {
-                    mFirebaseFirestore.collection("Groups").document().set(new GroupItem(GroupName, AdminId, AdminEmail, Code, Radius));
+                    if(clist==null) {
+                        clist = new ArrayList<>();
+                        clist.add(Code);
+                    }
+                    else {
+                        clist.add(Code);
+                    }
+                    mp.clear();
+                    mp.put("CodeList",clist);
 
+                    DocumentReference col =  mFirebaseFirestore.collection("Groups").document();
+                    String GroupId= col.getId();
+                    mFirebaseFirestore.collection("Groups").document(GroupId).set(new GroupItem(GroupName,GroupId, AdminId, AdminEmail, Code, Radius));
+                    mFirebaseFirestore.collection("Group'sCode").document(AdminId).set(mp);
+                    ArrayList<String> mlist= new ArrayList<>();
+                    mlist.add(AdminId);
+                    mFirebaseFirestore.collection("Zone").document(GroupId).set(new Zone(GroupId,Code,"0","0","0",mlist));
                 }
             }
         });
@@ -93,24 +113,7 @@ public class CreateGroupDialogBox extends AppCompatDialogFragment {
 
     }
 
-    public interface DialogBoxListener {
 
-
-
-
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-
-
-        super.onAttach(context);
-//        try {
-//            listener = (DialogBoxListener) context;
-//        } catch (ClassCastException e) {
-//            throw  new ClassCastException(context.toString() + "Must implement DialogboxListner");
-//        }
-    }
 
 
 }

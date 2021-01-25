@@ -23,8 +23,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
     public static final String PHONENUMBER  = "";
@@ -133,7 +136,12 @@ public class RegisterActivity extends AppCompatActivity {
 
                             intent.putExtra(PHONENUMBER, phonenumber);
                             startActivity(intent);
+                            Map<String, Object> mp=new HashMap<>();
+                            ArrayList<String> c = new ArrayList<>();
+                            mp.put("CodeList",c);
+                            mFirebaseFirestore.collection("Group'sCode").document(mFirebaseAuth.getCurrentUser().getUid()).set(mp);
                             progressBar.setVisibility(View.GONE);
+
                             finish();
                         }
                         else

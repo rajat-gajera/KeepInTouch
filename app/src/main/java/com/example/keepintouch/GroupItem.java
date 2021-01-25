@@ -4,15 +4,15 @@ import java.util.ArrayList;
 
 public class GroupItem {
 
-    private String GroupName, AdminId, AdminEmail, Code, Radius;
+    private String GroupName, AdminId, AdminEmail, Code, Radius,GroupId;
 
     // private ArrayList<String> MemberList;GroupId
     public GroupItem() {
 
     }
 
-    public GroupItem(String groupName, String adminId, String adminEmail, String code, String radius) {
-        //   GroupId = groupId;
+    public GroupItem(String groupName,String groupId, String adminId, String adminEmail, String code, String radius) {
+          GroupId = groupId;
         GroupName = groupName;
         AdminId = adminId;
         AdminEmail = adminEmail;
@@ -21,13 +21,13 @@ public class GroupItem {
 //        MemberList = memberList;
     }
 
-//    public String getGroupId() {
-//        return GroupId;
-//    }
+    public String getGroupId() {
+        return GroupId;
+    }
 
-//    public void setGroupId(String groupId) {
-//        GroupId = groupId;
-//    }
+    public void setGroupId(String groupId) {
+        GroupId = groupId;
+    }
 
     public String getAdminEmail() {
         return AdminEmail;

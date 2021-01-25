@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -31,15 +32,16 @@ import com.google.firestore.v1.Document;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-public class GroupsActivity extends Fragment implements CreateGroupDialogBox.DialogBoxListener {
+public class GroupsActivity extends Fragment {
 
     private static final String TAG = "";
     private ArrayList<GroupItem> mGroupList;
     private RecyclerView mRecyclerView;
     public GroupAdapter mAdapter;
     private ProgressDialog progressDialog;
-
+    private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore mFirebaseFirestore = FirebaseFirestore.getInstance();
     //private FloatingActionButton fab;
     private FloatingActionButton mJoinButton, mCreateGroupButton;
@@ -47,11 +49,12 @@ public class GroupsActivity extends Fragment implements CreateGroupDialogBox.Dia
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        getActivity().setTitle("GroupsActivity");
+        getActivity().setTitle("Groups");
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setCancelable(false);
         progressDialog.setTitle("Please Wait");
         progressDialog.setMessage("Loading...");
+        progressDialog.show();
 
         createGroupList();
 
@@ -71,15 +74,17 @@ public class GroupsActivity extends Fragment implements CreateGroupDialogBox.Dia
         mJoinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                JoinGroupDialogBox joinGroupDialogBox = new JoinGroupDialogBox();
+                joinGroupDialogBox.show(getFragmentManager(), "Join Group");
             }
         });
 
         mCreateGroupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                OpenDialog();
 
+                CreateGroupDialogBox createGroupDialogBox = new CreateGroupDialogBox();
+                createGroupDialogBox.show(getFragmentManager(), "Create Group");
             }
         });
 
@@ -96,13 +101,6 @@ public class GroupsActivity extends Fragment implements CreateGroupDialogBox.Dia
         return rootview;
     }
 
-
-    private void OpenDialog() {
-        CreateGroupDialogBox createGroupDialogBox = new CreateGroupDialogBox();
-        createGroupDialogBox.show(getFragmentManager(), "Create Group");
-
-
-    }
 
     private void createGroupList() {
 
@@ -132,13 +130,16 @@ public class GroupsActivity extends Fragment implements CreateGroupDialogBox.Dia
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 if (value.isEmpty()) {
-                    Log.d(TAG, "onSuccess : No Grpup Found!");
+                    Log.d(TAG, "onSuccess : No Group Found!");
                     return;
                 } else {
+
                     mGroupList.clear();
                     List<DocumentSnapshot> dsList = value.getDocuments();
                     for (DocumentSnapshot d : dsList) {
                         GroupItem group = d.toObject(GroupItem.class);
+                        String code = group.getCode();
+
                         mGroupList.add(group);
                     }
                     mAdapter.notifyDataSetChanged();
@@ -150,7 +151,6 @@ public class GroupsActivity extends Fragment implements CreateGroupDialogBox.Dia
             }
         });
     }
-
 
 
 }
