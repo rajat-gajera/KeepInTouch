@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.view.View;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -30,9 +32,11 @@ public class MembersActivity extends AppCompatActivity {
     private FirebaseFirestore mFirebaseFirestore = FirebaseFirestore.getInstance();
     private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
     ProgressDialog progressDialog ;
+     FloatingActionButton mapbutton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mapbutton = findViewById(R.id.mapbutton);
         progressDialog=new ProgressDialog(this);
         progressDialog.setCancelable(false);
         progressDialog.setTitle("Please Wait");
@@ -59,7 +63,6 @@ public class MembersActivity extends AppCompatActivity {
         setTitle("Members");
 
 
-//        createrMemberList();
         mRecyclerView = findViewById(R.id.memberrecyclerView);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
@@ -67,13 +70,18 @@ public class MembersActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mMemberAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getParent()));
 
+
+
         mMemberAdapter.setOnItemClickListener(new MemberAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 ////////////////////////////////////
             }
         });
-        System.out.println("loaded__________________-");
+
+
+
+
         progressDialog.dismiss();
     }
 
@@ -146,7 +154,7 @@ public class MembersActivity extends AppCompatActivity {
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         List<DocumentSnapshot> members = queryDocumentSnapshots.getDocuments();
                         for (DocumentSnapshot d : members) {
-                            System.out.println(d.toObject(User.class) + "_______________");
+//                            System.out.println(d.toObject(User.class) + "_______________");
                             User cu = d.toObject(User.class);
                             String id = cu.getUserId();
                             if (zonememberlist.contains(id)) {
@@ -163,4 +171,7 @@ public class MembersActivity extends AppCompatActivity {
     }
 
 
+    public void openMap(View view) {
+
+    }
 }
