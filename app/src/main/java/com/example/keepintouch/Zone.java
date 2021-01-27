@@ -6,6 +6,9 @@ public class Zone {
     String groupId,secretcode,latitude,longitude,radius;
     ArrayList<String> memberList;
 
+    public Zone() {
+    }
+
     public Zone(String groupId, String secretcode, String latitude, String longitude, String radius, ArrayList<String> codeList) {
         this.groupId = groupId;
         this.secretcode = secretcode;

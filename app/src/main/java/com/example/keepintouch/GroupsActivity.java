@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,11 +29,16 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Source;
 import com.google.firestore.v1.Document;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+
+import static java.util.Objects.*;
 
 public class GroupsActivity extends Fragment {
 
@@ -92,6 +98,11 @@ public class GroupsActivity extends Fragment {
         mAdapter.setOnItemClickListener(new GroupAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
+                Intent intent = new Intent(getActivity(), MembersActivity.class);
+                GroupItem gi = mGroupList.get(position);
+                String groupid = gi.getGroupId();
+                intent.putExtra("groupId", groupid);
+                startActivity(intent);
 
             }
         });
@@ -108,48 +119,41 @@ public class GroupsActivity extends Fragment {
         progressDialog.show();
         mGroupList = new ArrayList<>();
 
-//        mFirebaseFirestore.collection("Groups").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-//            @Override
-//            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-//                if (queryDocumentSnapshots.isEmpty()) {
-//                    Log.d(TAG, "onSuccess : No Grpup Found!");
-//                    return;
-//                } else {
-//                    List<DocumentSnapshot> dsList = queryDocumentSnapshots.getDocuments();
-//                    for (DocumentSnapshot d : dsList) {
-//                        GroupItem group = d.toObject(GroupItem.class);
-//                        mGroupList.add(group);
-//                    }
-//                    mAdapter.notifyDataSetChanged();
-//
-//                }
-//
-//            }
-//        });
-        mFirebaseFirestore.collection("Groups").addSnapshotListener(new EventListener<QuerySnapshot>() {
+        final ArrayList<String>[] usercodes = new ArrayList[]{new ArrayList<>()};
+        mFirebaseFirestore.collection("Group'sCode").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                if (value.isEmpty()) {
-                    Log.d(TAG, "onSuccess : No Group Found!");
-                    return;
-                } else {
+                List<DocumentSnapshot> dslist = value.getDocuments();
+                usercodes[0].clear();
+                for (DocumentSnapshot d : dslist) {
+                    if (d.getId().equals(mFirebaseAuth.getCurrentUser().getUid())) {
+                        Object o = d.get("CodeList");
+                        usercodes[0] = (ArrayList<String>) o;
 
-                    mGroupList.clear();
-                    List<DocumentSnapshot> dsList = value.getDocuments();
-                    for (DocumentSnapshot d : dsList) {
-                        GroupItem group = d.toObject(GroupItem.class);
-                        String code = group.getCode();
-
-                        mGroupList.add(group);
                     }
-                    mAdapter.notifyDataSetChanged();
                 }
-
-
-                progressDialog.dismiss();
-
+                mFirebaseFirestore.collection("Groups").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot value) {
+                        mGroupList.clear();
+                        List<DocumentSnapshot> dsList = value.getDocuments();
+                        for (DocumentSnapshot d : dsList) {
+                            GroupItem group = d.toObject(GroupItem.class);
+                            String code = group.getCode();
+                            System.out.println(code);
+                            for(String c: usercodes[0]) {
+                                if (c.equals(code)) {
+                                    System.out.println(code);
+                                    mGroupList.add(group);
+                                }
+                            }
+                        }
+                        mAdapter.notifyDataSetChanged();
+                    }
+                });
             }
         });
+
     }
 
 

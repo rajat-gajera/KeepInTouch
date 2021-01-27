@@ -19,16 +19,16 @@ public class User {
         Time = time;
         Latitude = latitude;
         Logitude = logitude;
-        GroupCode = new ArrayList<>();
+        //GroupCode = new ArrayList<>();
     }
-    public void setGroupCode(String code)
-    {
-        GroupCode.add(code);
-    }
-    public ArrayList<String> getGroupCode()
-    {
-        return GroupCode;
-    }
+//    public void setGroupCode(String code)
+//    {
+//        GroupCode.add(code);
+//    }
+//    public ArrayList<String> getGroupCode()
+//    {
+//        return GroupCode;
+//    }
 
     public String getDate() {
         return Date;

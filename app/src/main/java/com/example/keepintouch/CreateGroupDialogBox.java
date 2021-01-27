@@ -29,6 +29,7 @@ import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -88,23 +89,16 @@ public class CreateGroupDialogBox extends AppCompatDialogFragment {
                 if (GroupName.length() == 0) {
                     Toast.makeText(getContext(), "Group Name Should Not be Empty!", Toast.LENGTH_SHORT).show();
                 } else {
-                    if(clist==null) {
-                        clist = new ArrayList<>();
-                        clist.add(Code);
-                    }
-                    else {
-                        clist.add(Code);
-                    }
-                    mp.clear();
-                    mp.put("CodeList",clist);
+
 
                     DocumentReference col =  mFirebaseFirestore.collection("Groups").document();
                     String GroupId= col.getId();
                     mFirebaseFirestore.collection("Groups").document(GroupId).set(new GroupItem(GroupName,GroupId, AdminId, AdminEmail, Code, Radius));
-                    mFirebaseFirestore.collection("Group'sCode").document(AdminId).set(mp);
+                    mFirebaseFirestore.collection("Group'sCode").document(mFirebaseAuth.getCurrentUser().getUid()).update("CodeList", FieldValue.arrayUnion(Code));
                     ArrayList<String> mlist= new ArrayList<>();
                     mlist.add(AdminId);
                     mFirebaseFirestore.collection("Zone").document(GroupId).set(new Zone(GroupId,Code,"0","0","0",mlist));
+                    Toast.makeText(getContext(),"Group Created.",Toast.LENGTH_SHORT).show();
                 }
             }
         });
