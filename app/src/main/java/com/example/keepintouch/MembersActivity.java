@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -43,6 +44,8 @@ public class MembersActivity extends AppCompatActivity {
         progressDialog.setMessage("Loading...");
         progressDialog.show();
 
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if (savedInstanceState == null) {
             Bundle extra = getIntent().getExtras();
             if (extra == null) {
@@ -173,5 +176,6 @@ public class MembersActivity extends AppCompatActivity {
 
     public void openMap(View view) {
 
+        startActivity( new Intent(MembersActivity.this,MapsActivity.class));
     }
 }

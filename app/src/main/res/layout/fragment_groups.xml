@@ -8,8 +8,6 @@
     >
 
 
-
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
@@ -38,7 +36,7 @@
             android:id="@+id/join_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-             app:fab_colorNormal="@color/black"
+            app:fab_colorNormal="@color/black"
             app:fab_colorPressed="@color/white"
             app:fab_icon="@drawable/ic_join_group"
             app:fab_size="mini"
@@ -48,12 +46,11 @@
             android:id="@+id/create_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-             app:fab_colorNormal="@color/black"
+            app:fab_colorNormal="@color/black"
             app:fab_colorPressed="@color/white"
             app:fab_icon="@drawable/ic_add_group"
             app:fab_size="mini"
-            app:fab_title="Create Group"
-            />
+            app:fab_title="Create Group" />
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
