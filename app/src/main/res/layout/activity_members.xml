@@ -12,7 +12,7 @@
     android:background="@android:color/darker_gray"
     android:padding="7dp"
     android:scrollbars="vertical"
-    tools:context=".MembersActivity">
+    tools:context=".ui.MembersActivity">
 
 
 </androidx.recyclerview.widget.RecyclerView>

@@ -1,4 +1,4 @@
-package com.example.keepintouch;
+package com.example.keepintouch.Model;
 
 import java.util.ArrayList;
 

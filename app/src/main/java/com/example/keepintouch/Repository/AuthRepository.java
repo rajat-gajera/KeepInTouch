@@ -2,16 +2,12 @@ package com.example.keepintouch.Repository;
 
 
 import android.app.Application;
-import android.content.Intent;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.keepintouch.MainActivity;
-import com.example.keepintouch.RegisterActivity;
-import com.example.keepintouch.User;
+import com.example.keepintouch.Model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -25,8 +21,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-
-import static com.example.keepintouch.RegisterActivity.PHONENUMBER;
 
 public class AuthRepository {
     private Application application;

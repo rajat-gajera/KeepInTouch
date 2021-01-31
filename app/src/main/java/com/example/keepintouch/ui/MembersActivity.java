@@ -1,4 +1,4 @@
-package com.example.keepintouch;
+package com.example.keepintouch.ui;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +11,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.keepintouch.Adapter.MemberAdapter;
+import com.example.keepintouch.Model.User;
+import com.example.keepintouch.Model.Zone;
+import com.example.keepintouch.R;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,7 +23,6 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.Source;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -176,6 +179,6 @@ public class MembersActivity extends AppCompatActivity {
 
     public void openMap(View view) {
 
-        startActivity( new Intent(MembersActivity.this,MapsActivity.class));
+        startActivity( new Intent(MembersActivity.this, MapsActivity.class));
     }
 }

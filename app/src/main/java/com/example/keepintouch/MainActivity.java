@@ -12,6 +12,10 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.keepintouch.ui.GroupsActivity;
+import com.example.keepintouch.ui.LoginActivity;
+import com.example.keepintouch.ui.ServivalKitActivity;
+import com.example.keepintouch.ui.SettingsActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 

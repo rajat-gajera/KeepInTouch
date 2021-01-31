@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".RegisterActivity">
+    tools:context=".ui.RegisterActivity">
     <EditText
         android:id="@+id/email"
         android:layout_width="match_parent"

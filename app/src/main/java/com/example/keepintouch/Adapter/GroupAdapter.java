@@ -1,20 +1,16 @@
-package com.example.keepintouch;
+package com.example.keepintouch.Adapter;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firestore.v1.TargetOrBuilder;
+import com.example.keepintouch.Model.GroupItem;
+import com.example.keepintouch.R;
 
-import java.security.acl.Group;
 import java.util.ArrayList;
 
 public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHolder> {

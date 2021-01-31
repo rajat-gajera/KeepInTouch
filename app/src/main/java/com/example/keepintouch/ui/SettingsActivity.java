@@ -1,4 +1,4 @@
-package com.example.keepintouch;
+package com.example.keepintouch.ui;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,15 +9,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-public class ServivalKitActivity extends Fragment {
+import com.example.keepintouch.R;
+
+public class SettingsActivity extends Fragment {
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        getActivity().setTitle("Servival Kit");
+       getActivity().setTitle("SettingsActivity");
 
-
-        return inflater.inflate(R.layout.fragment_servival_kit,container,false);
-
+        return inflater.inflate(R.layout.fragment_settings,container,false);
     }
 }

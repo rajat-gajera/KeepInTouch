@@ -1,4 +1,4 @@
-package com.example.keepintouch;
+package com.example.keepintouch.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.keepintouch.MainActivity;
+import com.example.keepintouch.R;
 import com.example.keepintouch.ViewModel.AuthViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
