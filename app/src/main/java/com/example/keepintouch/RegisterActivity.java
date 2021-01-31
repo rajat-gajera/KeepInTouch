@@ -2,6 +2,8 @@ package com.example.keepintouch;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,12 +16,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.keepintouch.ViewModel.AuthViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
@@ -37,6 +41,8 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth;
     ProgressBar progressBar;
     FirebaseFirestore mFirebaseFirestore;
+
+    private AuthViewModel authViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,116 +58,105 @@ public class RegisterActivity extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseFirestore = FirebaseFirestore.getInstance();
 
-        mRegisterButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                progressBar.setVisibility(View.VISIBLE);
-                String name,password,email,confirmpassword,phonenumber;
-                name = mName.getText().toString().trim();
-                email =mEmail.getText().toString().trim();
-                phonenumber = mPhoneNumber.getText().toString().trim();
-                password = mPassword.getText().toString().trim();
-                confirmpassword = mConfirmPassword.getText().toString().trim();
-
-                if(email.length()==0)
-                {
-                    //Toast.makeText(getApplicationContext(),"Email Is Requiered!",Toast.LENGTH_SHORT).show();
-                    mEmail.setError("Email is Requiered!");
-                    progressBar.setVisibility(View.GONE);
-                    return;
-                }
-                if(name.length()==0)
-                {
-                    //Toast.makeText(getApplicationContext(),"Name Is Requiered!",Toast.LENGTH_SHORT).show();
-                    mName.setError("Name is Requiered!");
-                    progressBar.setVisibility(View.GONE);
-
-                    return;
-                }
-                if(phonenumber.length()!=10)
-                {
-                    //Toast.makeText(getApplicationContext(),"Name Is Requiered!",Toast.LENGTH_SHORT).show();
-                    mPhoneNumber.setError("Invalid Mobile Number!");
-                    progressBar.setVisibility(View.GONE);
-
-                    return;
-                }
-                if(phonenumber.length()==0)
-                {
-                    //Toast.makeText(getApplicationContext(),"Phone Is Requiered!",Toast.LENGTH_SHORT).show();
-                    mPhoneNumber.setError("Phone is Requiered!");
-                    progressBar.setVisibility(View.GONE);
-
-                    return;
-                }
-                if(password.length()==0)
-                {
-                    //Toast.makeText(getApplicationContext(),"Password Is Requiered!",Toast.LENGTH_SHORT).show();
-                    mPassword.setError("Password is Requiered!");
-                    progressBar.setVisibility(View.GONE);
-
-                    return;
-                }
-                if(password.length()<6)
-                {
-                    //Toast.makeText(getApplicationContext(),"Password Is Requiered!",Toast.LENGTH_SHORT).show();
-                    mPassword.setError("Password is too sort!");
-                    progressBar.setVisibility(View.GONE);
-
-                    return;
-                }
-                if(!password.equals(confirmpassword))
-                {
-                    Toast.makeText(getApplicationContext(),"Confirm Password isn't same!",Toast.LENGTH_SHORT).show();
-                    /// Toast.makeText(getApplicationContext(),""+password + " "+confirmpassword ,Toast.LENGTH_SHORT).show();
-
-                    mPassword.setError(""+password);
-                    mConfirmPassword.setError(""+confirmpassword);
-                    progressBar.setVisibility(View.GONE);
-
-                    return;
-                }
-
-                mFirebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            String date = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
-                            String time = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
-                            User user = new User(mFirebaseAuth.getCurrentUser().getUid(),name,phonenumber,email,password,date,time,"0","0");
-                            mFirebaseFirestore.collection("Users").document(user.getUserId()).set(user);
-                            Toast.makeText(getApplicationContext(), "User Created", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-
-                            intent.putExtra(PHONENUMBER, phonenumber);
-                            startActivity(intent);
-                            Map<String, Object> mp=new HashMap<>();
-                            ArrayList<String> c = new ArrayList<>();
-                            mp.put("CodeList",c);
-                            mFirebaseFirestore.collection("Group'sCode").document(mFirebaseAuth.getCurrentUser().getUid()).set(mp);
-                            progressBar.setVisibility(View.GONE);
-
-                            finish();
-                        }
-                        else
-                        {
-                            progressBar.setVisibility(View.GONE);
-                            Toast.makeText(getApplicationContext(), "Failed to Register!", Toast.LENGTH_SHORT).show();
-
-                        }
+        authViewModel = ViewModelProviders.of(this).get(AuthViewModel.class);
+              authViewModel.getUserMutableLiveData().observe(this, new Observer<FirebaseUser>() {
+                @Override
+                public void onChanged(FirebaseUser firebaseUser) {
+                    if(firebaseUser != null)
+                    {
+                        Toast.makeText(getApplicationContext(), "User Created", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                        progressBar.setVisibility(View.GONE);
+                        startActivity(intent);
+                        finish();
                     }
+                    else
+                    {
+                        Toast.makeText(getApplicationContext(), "Failed to Register!", Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.GONE);
+
                     }
-                );
-            }});
+                }
+            });
+
+              mRegisterButton.setOnClickListener(new View.OnClickListener() {
+                  @Override
+                  public void onClick(View view) {
+                      progressBar.setVisibility(View.VISIBLE);
+                      String name,password,email,confirmpassword,phonenumber;
+                      name = mName.getText().toString().trim();
+                      email =mEmail.getText().toString().trim();
+                      phonenumber = mPhoneNumber.getText().toString().trim();
+                      password = mPassword.getText().toString().trim();
+                      confirmpassword = mConfirmPassword.getText().toString().trim();
 
 
-    mRegistered.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            startActivity(new Intent(RegisterActivity.this,LoginActivity.class));
-            finish();
-        }
-    });
+                      if(email.length()==0)
+                      {
+                          //Toast.makeText(getApplicationContext(),"Email Is Requiered!",Toast.LENGTH_SHORT).show();
+                          mEmail.setError("Email is Requiered!");
+                          progressBar.setVisibility(View.GONE);
+                          return;
+                      }
+                      if(name.length()==0)
+                      {
+                          //Toast.makeText(getApplicationContext(),"Name Is Requiered!",Toast.LENGTH_SHORT).show();
+                          mName.setError("Name is Requiered!");
+                          progressBar.setVisibility(View.GONE);
+
+                          return;
+                      }
+                      if(phonenumber.length()!=10)
+                      {
+                          //Toast.makeText(getApplicationContext(),"Name Is Requiered!",Toast.LENGTH_SHORT).show();
+                          mPhoneNumber.setError("Invalid Mobile Number!");
+                          progressBar.setVisibility(View.GONE);
+
+                          return;
+                      }
+                      if(phonenumber.length()==0)
+                      {
+                          //Toast.makeText(getApplicationContext(),"Phone Is Requiered!",Toast.LENGTH_SHORT).show();
+                          mPhoneNumber.setError("Phone is Requiered!");
+                          progressBar.setVisibility(View.GONE);
+
+                          return;
+                      }
+                      if(password.length()==0)
+                      {
+                          //Toast.makeText(getApplicationContext(),"Password Is Requiered!",Toast.LENGTH_SHORT).show();
+                          mPassword.setError("Password is Requiered!");
+                          progressBar.setVisibility(View.GONE);
+
+                          return;
+                      }
+                      if(password.length()<6)
+                      {
+                          //Toast.makeText(getApplicationContext(),"Password Is Requiered!",Toast.LENGTH_SHORT).show();
+                          mPassword.setError("Password is too sort!");
+                          progressBar.setVisibility(View.GONE);
+
+                          return;
+                      }
+                      if(!password.equals(confirmpassword))
+                      {
+                          Toast.makeText(getApplicationContext(),"Confirm Password isn't same!",Toast.LENGTH_SHORT).show();
+                          /// Toast.makeText(getApplicationContext(),""+password + " "+confirmpassword ,Toast.LENGTH_SHORT).show();
+
+                          mPassword.setError(""+password);
+                          mConfirmPassword.setError(""+confirmpassword);
+                          progressBar.setVisibility(View.GONE);
+
+                          return;
+                      }
+                    authViewModel.RegisterUser(email,name,phonenumber,password);
+                  }
+              });
+
+
+
+
+
+
     }
 }

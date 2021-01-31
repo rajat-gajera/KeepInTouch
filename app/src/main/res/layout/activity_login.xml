@@ -32,13 +32,14 @@
         android:text="@string/log_in"
         android:id="@+id/login_btn"
         android:layout_margin="12dp"
-        android:onClick="logIn"
+
         />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/register_new_user"
-        android:onClick="regtisterNewUser"
+        android:id="@+id/register_text_btn"
+
 
 
         />
