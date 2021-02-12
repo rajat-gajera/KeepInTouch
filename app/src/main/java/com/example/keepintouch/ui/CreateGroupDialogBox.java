@@ -1,4 +1,4 @@
-package com.example.keepintouch;
+package com.example.keepintouch.ui;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -14,9 +14,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.example.keepintouch.Model.GroupItem;
 import com.example.keepintouch.Model.Zone;
+import com.example.keepintouch.R;
+import com.example.keepintouch.ViewModel.CreateGroupViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
@@ -33,10 +36,8 @@ public class CreateGroupDialogBox extends AppCompatDialogFragment {
 
     private FirebaseFirestore mFirebaseFirestore = FirebaseFirestore.getInstance();
     private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
-    Map<String, Object> mp= new HashMap<>();
-
-    private static ArrayList<String> clist;
-    @NonNull
+    private CreateGroupViewModel createGroupViewModel;
+     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
@@ -44,14 +45,12 @@ public class CreateGroupDialogBox extends AppCompatDialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.create_group_dialogbox, null);
-
+        createGroupViewModel = ViewModelProviders.of(this).get(CreateGroupViewModel.class);
+        String value = createGroupViewModel.getCode();
         copyCode = view.findViewById(R.id.copycode);
         mGroupName = view.findViewById(R.id.group_name);
         joinCode = view.findViewById(R.id.join_code);
-        double v = (Math.random() * 100000);
-        int value = (int) v;
-        joinCode.setText(Integer.toString(value));
-        String Code = Integer.toString(value);
+         joinCode.setText(value);
 
 
         builder.setView(view);
@@ -65,26 +64,13 @@ public class CreateGroupDialogBox extends AppCompatDialogFragment {
         builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                String Radius = "0";
-                String GroupName = mGroupName.getText().toString().trim();
-                String AdminId = mFirebaseAuth.getCurrentUser().getUid();
-                String AdminEmail = mFirebaseAuth.getCurrentUser().getEmail();
-
-
-
+                 String GroupName = mGroupName.getText().toString().trim();
                 if (GroupName.length() == 0) {
                     Toast.makeText(getContext(), "Group Name Should Not be Empty!", Toast.LENGTH_SHORT).show();
                 } else {
 
+                    createGroupViewModel.CreateGroup(GroupName);
 
-                    DocumentReference col =  mFirebaseFirestore.collection("Groups").document();
-                    String GroupId= col.getId();
-                    mFirebaseFirestore.collection("Groups").document(GroupId).set(new GroupItem(GroupName,GroupId, AdminId, AdminEmail, Code, Radius));
-                    mFirebaseFirestore.collection("Group'sCode").document(mFirebaseAuth.getCurrentUser().getUid()).update("CodeList", FieldValue.arrayUnion(Code));
-                    ArrayList<String> mlist= new ArrayList<>();
-                    mlist.add(AdminId);
-                    mFirebaseFirestore.collection("Zone").document(GroupId).set(new Zone(GroupId,Code,"0","0","0",mlist));
-                    Toast.makeText(getContext(),"Group Created.",Toast.LENGTH_SHORT).show();
                 }
             }
         });

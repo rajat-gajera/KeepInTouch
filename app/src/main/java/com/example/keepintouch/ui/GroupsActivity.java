@@ -3,6 +3,7 @@ package com.example.keepintouch.ui;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,15 +11,16 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.keepintouch.Adapter.GroupAdapter;
-import com.example.keepintouch.CreateGroupDialogBox;
-import com.example.keepintouch.JoinGroupDialogBox;
 import com.example.keepintouch.Model.GroupItem;
 import com.example.keepintouch.R;
+import com.example.keepintouch.ViewModel.GroupListViewModel;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,33 +35,25 @@ import java.util.List;
 
 public class GroupsActivity extends Fragment {
 
-    private static final String TAG = "";
-    private ArrayList<GroupItem> mGroupList;
+    private String TAG="grp_frg_tager";
+    private ArrayList<GroupItem> mGroupList = new ArrayList<>();
     private RecyclerView mRecyclerView;
     public GroupAdapter mAdapter;
     private ProgressDialog progressDialog;
-    private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
+    private final FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore mFirebaseFirestore = FirebaseFirestore.getInstance();
-    //private FloatingActionButton fab;
     private FloatingActionButton mJoinButton, mCreateGroupButton;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         getActivity().setTitle("Groups");
-        progressDialog = new ProgressDialog(getContext());
-        progressDialog.setCancelable(false);
-        progressDialog.setTitle("Please Wait");
-        progressDialog.setMessage("Loading...");
-        progressDialog.show();
-
-        createGroupList();
-
 
         View rootview = inflater.inflate(R.layout.fragment_groups, container, false);
+
+        Log.d(TAG, "onCreateView: ");
         mRecyclerView = rootview.findViewById(R.id.recyclerView);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-
         mAdapter = new GroupAdapter(mGroupList);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -67,10 +61,23 @@ public class GroupsActivity extends Fragment {
         mJoinButton = rootview.findViewById(R.id.join_button);
         mCreateGroupButton = rootview.findViewById(R.id.create_button);
 
+        GroupListViewModel groupListViewModel = ViewModelProviders.of(getActivity()).get(GroupListViewModel.class);
+        groupListViewModel.getGroupData();
+        groupListViewModel.getMutableLiveData().observe(getActivity(), new Observer<List<GroupItem>>() {
+            @Override
+            public void onChanged(List<GroupItem> groupItems) {
+                Log.d(TAG, "onChanged: "+groupItems.size());
+                mGroupList = (ArrayList<GroupItem>) groupItems;
+                mAdapter.setList(groupItems);
+                mAdapter.notifyDataSetChanged();
+            }
+        });
+
 
         mJoinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//                groupListViewModel.getGroupData();
                 JoinGroupDialogBox joinGroupDialogBox = new JoinGroupDialogBox();
                 joinGroupDialogBox.show(getFragmentManager(), "Join Group");
             }
@@ -98,7 +105,6 @@ public class GroupsActivity extends Fragment {
             }
         });
 
-        progressDialog.dismiss();
 
         return rootview;
     }

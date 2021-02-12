@@ -12,10 +12,22 @@ import com.example.keepintouch.Model.GroupItem;
 import com.example.keepintouch.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHolder> {
-    private ArrayList<GroupItem> mGroupList;
+    private ArrayList<GroupItem> mGroupList=new ArrayList<>();
     private OnItemClickListener mListener;
+
+    public GroupAdapter(ArrayList<GroupItem> mGroupList) {
+        this.mGroupList = mGroupList;
+    }
+
+    public void setList(List<GroupItem> groupItems) {
+    this.mGroupList = (ArrayList<GroupItem>) groupItems;
+    notifyDataSetChanged();
+    }
+
+
     public interface OnItemClickListener {
         void onItemClick(int position);
     }
@@ -49,9 +61,6 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
         }
     }
 
-    public GroupAdapter(ArrayList<GroupItem> mGroupList) {
-        this.mGroupList = mGroupList;
-    }
 
     @NonNull
     @Override

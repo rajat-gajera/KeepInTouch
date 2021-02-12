@@ -28,7 +28,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mFirebaseAuth = FirebaseAuth.getInstance();
-
+        Intent locationintent = new Intent(this,LocationService.class);
+        startService(locationintent);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -64,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.log_out:
                 mFirebaseAuth.signOut();
+                Intent locationintent = new Intent(this,LocationService.class);
+                stopService(locationintent);
                 finish();
                 startActivity(new Intent(this, LoginActivity.class));
                 break;
