@@ -21,13 +21,19 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import static com.example.keepintouch.App.CHANNEL_ID;
 
 public class LocationService extends Service {
-
+    private FirebaseFirestore mFirebaseFirestore  = FirebaseFirestore.getInstance();
+    private FirebaseAuth mFirebaseAuth= FirebaseAuth.getInstance();
     private static final String TAG = "lct_src_tager";
     private FusedLocationProviderClient mLocationClient;
     private LocationCallback mLocationCallback;
@@ -45,7 +51,20 @@ public class LocationService extends Service {
                  }
                  List<Location> locationList =  locationResult.getLocations();
                  Log.d(TAG,"LocationResultget"+locationList.toString());
-                 Toast.makeText(getApplicationContext(),""+locationList.toString(),Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getApplicationContext(),""+locationList.toString(),Toast.LENGTH_SHORT).show();
+                 for(Location l:locationList)
+                 {
+                     String lati =Double.toString(l.getLatitude());
+                     String longi=Double.toString( l.getLongitude());
+                     Date date = new Date(l.getTime());
+
+                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+                     String time = dateFormat.format(date);
+                     mFirebaseFirestore.collection("Users").document(mFirebaseAuth.getCurrentUser().getUid()).update("latitude",lati);
+                     mFirebaseFirestore.collection("Users").document(mFirebaseAuth.getCurrentUser().getUid()).update("logitude",longi);
+                     mFirebaseFirestore.collection("Users").document(mFirebaseAuth.getCurrentUser().getUid()).update("time",time);
+
+                 }
 
              }
          };
@@ -74,7 +93,7 @@ public class LocationService extends Service {
     private void getLocatoinUpdates() {
         LocationRequest locationRequest= LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(5000);
+        locationRequest.setInterval(50000);
         locationRequest.setFastestInterval(4000);
         locationRequest.setMaxWaitTime(15*1000);
 
