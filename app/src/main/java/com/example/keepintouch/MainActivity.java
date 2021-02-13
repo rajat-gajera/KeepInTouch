@@ -10,9 +10,11 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
+import android.app.Application;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -34,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Boolean mLocationPermissionsGranted = false;
     private TextView mUserName;
     private TextView mUserEId;
-     FirebaseAuth mFirebaseAuth ;
+     FirebaseAuth mFirebaseAuth;
     DrawerLayout drawer ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +48,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        drawer = findViewById(R.id.draw_layout);
-
-        NavigationView navigationView = findViewById(R.id.navigation_view);
+         drawer = findViewById(R.id.draw_layout);
+         NavigationView navigationView = findViewById(R.id.navigation_view);
         mUserName = navigationView.getHeaderView(0).findViewById(R.id.login_user_name);
         mUserEId = (TextView) navigationView.getHeaderView(0).findViewById(R.id.user_Eid);
         mUserName.setText(mFirebaseAuth.getCurrentUser().getDisplayName());

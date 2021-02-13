@@ -12,11 +12,18 @@ import com.example.keepintouch.Model.User;
 import com.example.keepintouch.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MemberAdapter  extends RecyclerView.Adapter<MemberAdapter.MemberViewHolder>{
 
     private ArrayList<User> mMemberList = null;
     private MemberAdapter.OnItemClickListener mListener;
+
+    public void setList(List<User> users) {
+        mMemberList = (ArrayList<User>) users;
+
+    }
+
     public interface OnItemClickListener {
         void onItemClick(int position);
     }

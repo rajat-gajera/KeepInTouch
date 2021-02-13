@@ -2,6 +2,8 @@ package com.example.keepintouch.ui;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,12 +11,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.example.keepintouch.Adapter.MemberAdapter;
 import com.example.keepintouch.Model.User;
 import com.example.keepintouch.Model.Zone;
 import com.example.keepintouch.R;
+import com.example.keepintouch.Repository.MemberListRepository;
+import com.example.keepintouch.ViewModel.MemberListViewModel;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,17 +33,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MembersActivity extends AppCompatActivity {
-
+    private String TAG="mem_act_tager";
     private ArrayList<User> mMemberList;
     private RecyclerView mRecyclerView;
     private MemberAdapter mMemberAdapter;
-    private String currentgroupid;
+    public String currentgroupid=null;
     private FirebaseFirestore mFirebaseFirestore = FirebaseFirestore.getInstance();
     private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
     ProgressDialog progressDialog ;
      FloatingActionButton mapbutton;
-
-    @Override
+    static MembersActivity INSTANCE;
+     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mapbutton = findViewById(R.id.mapbutton);
         progressDialog=new ProgressDialog(this);
@@ -46,7 +51,7 @@ public class MembersActivity extends AppCompatActivity {
         progressDialog.setTitle("Please Wait");
         progressDialog.setMessage("Loading...");
         progressDialog.show();
-
+        INSTANCE = this;
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if (savedInstanceState == null) {
@@ -56,14 +61,14 @@ public class MembersActivity extends AppCompatActivity {
                 System.out.println("didn't get current group id");
             } else {
                 currentgroupid = extra.getString("groupId");
+
             }
         } else {
             currentgroupid = (String) savedInstanceState.getSerializable("groupId");
 
         }
         mMemberList = new ArrayList<>();
-        creatememberlist();
-
+        //creatememberlist();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_members);
         setTitle("Members");
@@ -75,7 +80,17 @@ public class MembersActivity extends AppCompatActivity {
         mMemberAdapter = new MemberAdapter(mMemberList);
         mRecyclerView.setAdapter(mMemberAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getParent()));
-
+        MemberListViewModel memberListViewModel = new ViewModelProvider(this).get(MemberListViewModel.class);
+        memberListViewModel.mutableMemberList.observe(this, new Observer<List<User>>() {
+            @Override
+            public void onChanged(List<User> users) {
+                mMemberList = (ArrayList<User>) users;
+                mMemberAdapter.setList(users);
+                mMemberAdapter.notifyDataSetChanged();
+                Log.d(TAG,"OnChanged!"+ users.size());
+            }
+        });
+        memberListViewModel.getMemberList(currentgroupid);
 
 
         mMemberAdapter.setOnItemClickListener(new MemberAdapter.OnItemClickListener() {
@@ -90,95 +105,107 @@ public class MembersActivity extends AppCompatActivity {
 
         progressDialog.dismiss();
     }
+    public static MembersActivity getMemberActivityInstance()
+    {
+        return INSTANCE;
+    }
+    public String getCurrentgroupid()
+    {
+        return this.currentgroupid;
+    }
 
-    private void creatememberlist() {
 
-        final ArrayList<String>[] memberids = new ArrayList[]{new ArrayList<>()};
-        mFirebaseFirestore.collection("Zone").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-            List<DocumentSnapshot> dslist = queryDocumentSnapshots.getDocuments();
-                memberids[0].clear();
-                for (DocumentSnapshot d : dslist) {
-                    if (d.getId().equals(currentgroupid) ){
-                        Object o = d.get("memberList");
-                        memberids[0] = (ArrayList<String>) o;
-                        //System.out.println(memberids[0]+"+++++++++++++++++");
-                    }
-                }
 
-                mFirebaseFirestore.collection("Users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        List<DocumentSnapshot> dsList = queryDocumentSnapshots.getDocuments();
-                        for (DocumentSnapshot d : dsList) {
-                            User memberuser = d.toObject(User.class);
-                            String id = memberuser.getUserId();
-                            if(memberids[0].contains(id))
-                            {
-                                //System.out.println(memberuser.getName()+"----------");
-                                mMemberList.add(memberuser);
-                            }
-                        }
-                        System.out.println(mMemberList.toString()+"+++++++++++++++++++");
-                        mMemberAdapter.notifyDataSetChanged();
-
-                    }
-
-                });
+//    private void creatememberlist() {
+//
+//        final ArrayList<String>[] memberids = new ArrayList[]{new ArrayList<>()};
+//        mFirebaseFirestore.collection("Zone").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//            @Override
+//            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//            List<DocumentSnapshot> dslist = queryDocumentSnapshots.getDocuments();
+//                memberids[0].clear();
+//                for (DocumentSnapshot d : dslist) {
+//                    if (d.getId().equals(currentgroupid) ){
+//                        Object o = d.get("memberList");
+//                        memberids[0] = (ArrayList<String>) o;
+//                        //System.out.println(memberids[0]+"+++++++++++++++++");
+//                    }
+//                }
+//
+//                mFirebaseFirestore.collection("Users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                        List<DocumentSnapshot> dsList = queryDocumentSnapshots.getDocuments();
+//                        for (DocumentSnapshot d : dsList) {
+//                            User memberuser = d.toObject(User.class);
+//                            String id = memberuser.getUserId();
+//                            if(memberids[0].contains(id))
+//                            {
+//                                //System.out.println(memberuser.getName()+"----------");
+//                                mMemberList.add(memberuser);
+//                            }
+//                        }
+//                        System.out.println(mMemberList.toString()+"+++++++++++++++++++");
+//                        mMemberAdapter.notifyDataSetChanged();
+//
+//                    }
+//
+//                });
+////                mMemberAdapter.notifyDataSetChanged();
+////                System.out.println(mMemberList.toString()+"+++++++++++++++++++");
+//
+//
+//            }
+//
+//        });
+//
+//
+//    }
+//
+//
+//    private void createrMemberList() {
+//        ///fire base mathi user member ly ne list  banavani che aya
+//
+//        // mMemberAdapter.notifyDataSetChanged();
+//        mFirebaseFirestore.collection("Zone").addSnapshotListener(new EventListener<QuerySnapshot>() {
+//            @Override
+//            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+//                List<DocumentSnapshot> zonelist = value.getDocuments();
+//                Zone currentZone = zonelist.get(0).toObject(Zone.class);
+//                for (DocumentSnapshot z : zonelist) {
+//                    Zone tempzone = z.toObject(Zone.class);
+//                    if ((currentgroupid.equals(tempzone.getGroupId()))) {
+//                        currentZone = tempzone;
+//                        break;
+//                    }
+//                }
+//                ArrayList<String> zonememberlist = currentZone.getMemberList();
+//                mFirebaseFirestore.collection("Users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                        List<DocumentSnapshot> members = queryDocumentSnapshots.getDocuments();
+//                        for (DocumentSnapshot d : members) {
+////                            System.out.println(d.toObject(User.class) + "_______________");
+//                            User cu = d.toObject(User.class);
+//                            String id = cu.getUserId();
+//                            if (zonememberlist.contains(id)) {
+//                                mMemberList.add(cu);
+//                            }
+//
+//                        }
+//                    }
+//                });
 //                mMemberAdapter.notifyDataSetChanged();
-//                System.out.println(mMemberList.toString()+"+++++++++++++++++++");
-
-
-            }
-
-        });
-
-
-    }
-
-
-    private void createrMemberList() {
-        ///fire base mathi user member ly ne list  banavani che aya
-
-        // mMemberAdapter.notifyDataSetChanged();
-        mFirebaseFirestore.collection("Zone").addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                List<DocumentSnapshot> zonelist = value.getDocuments();
-                Zone currentZone = zonelist.get(0).toObject(Zone.class);
-                for (DocumentSnapshot z : zonelist) {
-                    Zone tempzone = z.toObject(Zone.class);
-                    if ((currentgroupid.equals(tempzone.getGroupId()))) {
-                        currentZone = tempzone;
-                        break;
-                    }
-                }
-                ArrayList<String> zonememberlist = currentZone.getMemberList();
-                mFirebaseFirestore.collection("Users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        List<DocumentSnapshot> members = queryDocumentSnapshots.getDocuments();
-                        for (DocumentSnapshot d : members) {
-//                            System.out.println(d.toObject(User.class) + "_______________");
-                            User cu = d.toObject(User.class);
-                            String id = cu.getUserId();
-                            if (zonememberlist.contains(id)) {
-                                mMemberList.add(cu);
-                            }
-
-                        }
-                    }
-                });
-                mMemberAdapter.notifyDataSetChanged();
-            }
-        });
-
-    }
-
+//            }
+//        });
+//
+//    }
+//
 
     public void openMap(View view) {
 
         startActivity( new Intent(MembersActivity.this, MapsActivity.class));
     }
+
+
 }

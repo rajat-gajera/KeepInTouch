@@ -1,5 +1,6 @@
 package com.example.keepintouch.ui;
 
+import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.keepintouch.Adapter.GroupAdapter;
+import com.example.keepintouch.MainActivity;
 import com.example.keepintouch.Model.GroupItem;
 import com.example.keepintouch.R;
 import com.example.keepintouch.ViewModel.GroupListViewModel;
@@ -105,6 +107,7 @@ public class GroupsActivity extends Fragment {
                 Intent intent = new Intent(getActivity(), MembersActivity.class);
                 GroupItem gi = mGroupList.get(position);
                 String groupid = gi.getGroupId();
+
                 intent.putExtra("groupId", groupid);
                 startActivity(intent);
 
@@ -116,48 +119,6 @@ public class GroupsActivity extends Fragment {
     }
 
 
-    private void createGroupList() {
-
-
-        progressDialog.show();
-        mGroupList = new ArrayList<>();
-
-        final ArrayList<String>[] usercodes = new ArrayList[]{new ArrayList<>()};
-        mFirebaseFirestore.collection("Group'sCode").addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                List<DocumentSnapshot> dslist = value.getDocuments();
-                usercodes[0].clear();
-                for (DocumentSnapshot d : dslist) {
-                    if (d.getId().equals(mFirebaseAuth.getCurrentUser().getUid())) {
-                        Object o = d.get("CodeList");
-                        usercodes[0] = (ArrayList<String>) o;
-
-                    }
-                }
-                mFirebaseFirestore.collection("Groups").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot value) {
-                        mGroupList.clear();
-                        List<DocumentSnapshot> dsList = value.getDocuments();
-                        for (DocumentSnapshot d : dsList) {
-                            GroupItem group = d.toObject(GroupItem.class);
-                            String code = group.getCode();
-                            System.out.println(code);
-                            for(String c: usercodes[0]) {
-                                if (c.equals(code)) {
-                                    System.out.println(code);
-                                    mGroupList.add(group);
-                                }
-                            }
-                        }
-                        mAdapter.notifyDataSetChanged();
-                    }
-                });
-            }
-        });
-
-    }
 
 
 }
