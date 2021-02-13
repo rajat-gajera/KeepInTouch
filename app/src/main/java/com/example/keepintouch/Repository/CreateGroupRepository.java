@@ -10,7 +10,10 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class CreateGroupRepository {
     Application application;
@@ -24,13 +27,13 @@ public class CreateGroupRepository {
         mFirebaseFirestore=FirebaseFirestore.getInstance();
     }
     public void CreateGroup(String GroupName,String Code)
-    {
+    {    String Date = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
         String Radius="0";
        String  AdminEmail=mFirebaseAuth.getCurrentUser().getEmail();
         String AdminId = mFirebaseAuth.getCurrentUser().getUid();
         DocumentReference col =  mFirebaseFirestore.collection("Groups").document();
         String GroupId= col.getId();
-        mFirebaseFirestore.collection("Groups").document(GroupId).set(new GroupItem(GroupName,GroupId, AdminId, AdminEmail, Code, Radius));
+        mFirebaseFirestore.collection("Groups").document(GroupId).set(new GroupItem(GroupName, GroupId, AdminId, AdminEmail, Code, Radius,Date));
         mFirebaseFirestore.collection("Group'sCode").document(mFirebaseAuth.getCurrentUser().getUid()).update("CodeList", FieldValue.arrayUnion(Code));
         ArrayList<String> mlist= new ArrayList<>();
         mlist.add(AdminId);

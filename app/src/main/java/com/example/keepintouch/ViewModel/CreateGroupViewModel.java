@@ -1,12 +1,14 @@
 package com.example.keepintouch.ViewModel;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
 
 import com.example.keepintouch.Repository.CreateGroupRepository;
 
 public class CreateGroupViewModel extends AndroidViewModel {
+    private static final String TAG = "crt_grp_vm_tager";
     private CreateGroupRepository createGroupRepository;
     String Code;
     public CreateGroupViewModel(Application application)
@@ -24,6 +26,6 @@ public class CreateGroupViewModel extends AndroidViewModel {
     public void CreateGroup(String GroupName)
     {
         createGroupRepository.CreateGroup(GroupName,Code);
-
+        Log.d(TAG,"method");
     }
 }

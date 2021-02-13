@@ -1,6 +1,7 @@
 package com.example.keepintouch;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
@@ -29,83 +31,87 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static com.example.keepintouch.App.CHANNEL_ID;
 
 public class LocationService extends Service {
-    private FirebaseFirestore mFirebaseFirestore  = FirebaseFirestore.getInstance();
-    private FirebaseAuth mFirebaseAuth= FirebaseAuth.getInstance();
+    private FirebaseFirestore mFirebaseFirestore = FirebaseFirestore.getInstance();
+    private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
     private static final String TAG = "lct_src_tager";
     private FusedLocationProviderClient mLocationClient;
     private LocationCallback mLocationCallback;
+
+
     @Override
     public void onCreate() {
         super.onCreate();
         mLocationClient = LocationServices.getFusedLocationProviderClient(getApplicationContext());
-         mLocationCallback = new LocationCallback(){
-             @Override
-             public void onLocationResult(LocationResult locationResult) {
-                 if(locationResult==null)
-                 {
-                     Log.d(TAG,"onLocationResult:locationError");
-                     return;
-                 }
-                 List<Location> locationList =  locationResult.getLocations();
-                 Log.d(TAG,"LocationResultget"+locationList.toString());
+        mLocationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult == null) {
+                    Log.d(TAG, "onLocationResult:locationError");
+                    return;
+                }
+                List<Location> locationList = locationResult.getLocations();
+                Log.d(TAG, "LocationResultget" + locationList.toString());
                 // Toast.makeText(getApplicationContext(),""+locationList.toString(),Toast.LENGTH_SHORT).show();
-                 for(Location l:locationList)
-                 {
-                     String lati =Double.toString(l.getLatitude());
-                     String longi=Double.toString( l.getLongitude());
-                     Date date = new Date(l.getTime());
+                for (Location l : locationList) {
+                    String lati = Double.toString(l.getLatitude());
+                    String longi = Double.toString(l.getLongitude());
+                    Date date = new Date(l.getTime());
 
-                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-                     String time = dateFormat.format(date);
-                     mFirebaseFirestore.collection("Users").document(mFirebaseAuth.getCurrentUser().getUid()).update("latitude",lati);
-                     mFirebaseFirestore.collection("Users").document(mFirebaseAuth.getCurrentUser().getUid()).update("logitude",longi);
-                     mFirebaseFirestore.collection("Users").document(mFirebaseAuth.getCurrentUser().getUid()).update("time",time);
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+                    String time = dateFormat.format(date);
+                    mFirebaseFirestore.collection("Users").document(mFirebaseAuth.getCurrentUser().getUid()).update("latitude", lati);
+                    mFirebaseFirestore.collection("Users").document(mFirebaseAuth.getCurrentUser().getUid()).update("logitude", longi);
+                    mFirebaseFirestore.collection("Users").document(mFirebaseAuth.getCurrentUser().getUid()).update("time", time);
 
-                 }
+                }
 
-             }
-         };
-         Log.d(TAG,"OnCreate:location");
+            }
+        };
+        Log.d(TAG, "OnCreate:location");
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Intent notificationIntent = new Intent(this,MainActivity.class);
+        Intent notificationIntent = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
                 0,
                 notificationIntent,
                 0);
-        Notification notification = new NotificationCompat.Builder(this,CHANNEL_ID)
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle("Keep IN Touch")
                 .setContentText("Location Service")
                 .setSmallIcon(R.drawable.ic_android)
                 .setContentIntent(pendingIntent)
                 .build();
-        startForeground(1,notification);
+        startForeground(1, notification);
         getLocatoinUpdates();
         return START_STICKY;
 
-     }
+    }
 
     private void getLocatoinUpdates() {
-        LocationRequest locationRequest= LocationRequest.create();
+        LocationRequest locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(50000);
+        locationRequest.setInterval(5000);
         locationRequest.setFastestInterval(4000);
-        locationRequest.setMaxWaitTime(15*1000);
+        locationRequest.setMaxWaitTime(15 * 1000);
 
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Log.d(TAG,"location Permission") ;
-            stopSelf();
-            return;
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            Toast.makeText(this,"Location Pemission Rqquired!!",Toast.LENGTH_SHORT).show();
+           return;
+
         }
-        mLocationClient.requestLocationUpdates(locationRequest,mLocationCallback, Looper.myLooper());
+        mLocationClient.requestLocationUpdates(locationRequest, mLocationCallback, Looper.myLooper());
 
 
     }
+
 
     @Override
     public void onDestroy() {

@@ -4,21 +4,33 @@ import java.util.ArrayList;
 
 public class GroupItem {
 
-    private String GroupName, AdminId, AdminEmail, Code, Radius,GroupId;
+    private String GroupName, AdminId, AdminEmail, Code, Radius,GroupId,Date;
 
     // private ArrayList<String> MemberList;GroupId
     public GroupItem() {
 
     }
 
-    public GroupItem(String groupName,String groupId, String adminId, String adminEmail, String code, String radius) {
-          GroupId = groupId;
+    public GroupItem(String groupName, String groupId, String adminId, String adminEmail, String code, String radius, String date) {
         GroupName = groupName;
         AdminId = adminId;
         AdminEmail = adminEmail;
         Code = code;
         Radius = radius;
-//        MemberList = memberList;
+        GroupId = groupId;
+        Date = date;
+    }
+
+    public void setAdminEmail(String adminEmail) {
+        AdminEmail = adminEmail;
+    }
+
+    public String getDate() {
+        return Date;
+    }
+
+    public void setDate(String date) {
+        Date = date;
     }
 
     public String getGroupId() {

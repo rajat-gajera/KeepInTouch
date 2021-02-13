@@ -37,13 +37,14 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
     }
 
     public static  class GroupViewHolder extends RecyclerView.ViewHolder{
-        public  TextView mGroupName,mAdminEmail;
+        public  TextView mGroupName,mAdminEmail,mDate;
 
 
         public GroupViewHolder(@NonNull View itemView,final  OnItemClickListener listener) {
             super(itemView);
             mAdminEmail =  itemView.findViewById(R.id.admin_email);
             mGroupName =  itemView.findViewById(R.id.group_name);
+            mDate = itemView.findViewById(R.id.Created_date);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -75,7 +76,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
     GroupItem currentGroup = (GroupItem) mGroupList.get(position);
     holder.mGroupName.setText(currentGroup.getGroupName());
     holder.mAdminEmail.setText(currentGroup.getCode());
-
+    holder.mDate.setText(currentGroup.getDate());
      }
 
     @Override

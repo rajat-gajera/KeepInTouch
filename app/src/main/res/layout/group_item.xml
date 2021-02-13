@@ -30,7 +30,8 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:layout_marginStart="8dp"
-            />
+            android:layout_toRightOf="@id/groupImageView"
+            android:layout_marginLeft="8dp" />
 
         <TextView
             android:id="@+id/admin_email"
@@ -44,7 +45,18 @@
             android:textSize="15sp"
             android:layout_marginStart="8dp"
 
-            />
+            android:layout_toRightOf="@id/groupImageView"
+            android:layout_marginLeft="8dp" />
+
+        <TextView
+            android:id="@+id/Created_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DATE"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="7dp"
+            android:layout_alignParentRight="true" />
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

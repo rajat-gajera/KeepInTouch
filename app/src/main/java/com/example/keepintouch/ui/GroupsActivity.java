@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -61,17 +62,17 @@ public class GroupsActivity extends Fragment {
         mJoinButton = rootview.findViewById(R.id.join_button);
         mCreateGroupButton = rootview.findViewById(R.id.create_button);
 
-        GroupListViewModel groupListViewModel = ViewModelProviders.of(getActivity()).get(GroupListViewModel.class);
-        groupListViewModel.getGroupData();
-        groupListViewModel.getMutableLiveData().observe(getActivity(), new Observer<List<GroupItem>>() {
+        GroupListViewModel groupListViewModel = new ViewModelProvider(this).get(GroupListViewModel.class);
+        groupListViewModel.groupItemList.observe(getActivity(), new Observer<List<GroupItem>>() {
             @Override
             public void onChanged(List<GroupItem> groupItems) {
-                Log.d(TAG, "onChanged: "+groupItems.size());
+                Log.d(TAG, "onChanged: " + groupItems.size());
                 mGroupList = (ArrayList<GroupItem>) groupItems;
                 mAdapter.setList(groupItems);
                 mAdapter.notifyDataSetChanged();
             }
         });
+        groupListViewModel.getGroupData();
 
 
         mJoinButton.setOnClickListener(new View.OnClickListener() {
@@ -86,9 +87,14 @@ public class GroupsActivity extends Fragment {
         mCreateGroupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Log.d(TAG,"Creating Group");
                 CreateGroupDialogBox createGroupDialogBox = new CreateGroupDialogBox();
                 createGroupDialogBox.show(getFragmentManager(), "Create Group");
+                groupListViewModel.getGroupData();
+                Log.d(TAG,"Created Group");
+
+                mAdapter.notifyDataSetChanged();
+
             }
         });
 
