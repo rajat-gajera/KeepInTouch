@@ -1,9 +1,11 @@
 package com.example.keepintouch.Repository;
 
 import android.app.Application;
+import android.location.Location;
 import android.widget.Toast;
 
 import com.example.keepintouch.Model.GroupItem;
+import com.example.keepintouch.Model.MyLocation;
 import com.example.keepintouch.Model.Zone;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -38,6 +40,8 @@ public class CreateGroupRepository {
         ArrayList<String> mlist= new ArrayList<>();
         mlist.add(AdminId);
         mFirebaseFirestore.collection("Zone").document(GroupId).set(new Zone(GroupId,Code,"0","0","0",mlist));
+        mFirebaseFirestore.collection("Zone").document(GroupId).collection("memberList").document(AdminId).set(new MyLocation(AdminId,new Location("")));
+
         Toast.makeText(application,"Group Created.",Toast.LENGTH_SHORT).show();
     }
 }

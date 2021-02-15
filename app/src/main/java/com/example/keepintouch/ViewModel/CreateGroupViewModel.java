@@ -26,6 +26,6 @@ public class CreateGroupViewModel extends AndroidViewModel {
     public void CreateGroup(String GroupName)
     {
         createGroupRepository.CreateGroup(GroupName,Code);
-        Log.d(TAG,"method");
+        //Log.d(TAG,"method");
     }
 }

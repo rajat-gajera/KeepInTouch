@@ -24,7 +24,7 @@ public class MemberListViewModel extends  ViewModel{
         memberListRepository.mutableMemberListLiveData.observeForever(new Observer<List<User>>() {
             @Override
             public void onChanged(List<User> users) {
-                Log.d(TAG,"MembeListViewModel:");
+               // Log.d(TAG,"MembeListViewModel:");
                 mutableMemberList.postValue(users);
             }
         });

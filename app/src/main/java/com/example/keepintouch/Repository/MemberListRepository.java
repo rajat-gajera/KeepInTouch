@@ -39,7 +39,7 @@ public class MemberListRepository {
                 memberids[0].clear();
                 for (DocumentSnapshot d : dslist) {
                     if (d.getId().equals(currentgroupid) ){
-                        Log.d(TAG,currentgroupid);
+                      //  Log.d(TAG,currentgroupid);
                         Object o = d.get("memberList");
                         memberids[0] = (ArrayList<String>) o;
                         //System.out.println(memberids[0]+"+++++++++++++++++");
@@ -57,11 +57,11 @@ public class MemberListRepository {
                             if(memberids[0].contains(id))
                             {
                                  mMemberList.add(memberuser);
-                                Log.d(TAG,memberuser.getEmail());
+                                //(TAG,memberuser.getEmail());
                             }
                         }
 
-                        Log.d(TAG,mMemberList.toString());
+                    //    Log.d(TAG,mMemberList.toString());
                         mutableMemberListLiveData.postValue(mMemberList);
                     }
 
@@ -70,6 +70,6 @@ public class MemberListRepository {
             }
 
         });
-        Log.d(TAG,"memberlist size"+mMemberList.size());
+        //Log.d(TAG,"memberlist size"+mMemberList.size());
     }
 }

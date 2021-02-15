@@ -34,7 +34,7 @@ public class GroupListRepository {
     }
 
     public void getMutableGroupListLiveData() {
-        Log.d(TAG, "getMutableGroupListLiveData: ");
+       // Log.d(TAG, "getMutableGroupListLiveData: ");
 
         final ArrayList<String> usercodes = new ArrayList<>();
         mFirebaseFirestore.collection("Group'sCode").addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -47,7 +47,7 @@ public class GroupListRepository {
            // @Override
           //  public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 List<DocumentSnapshot> dslist = queryDocumentSnapshots.getDocuments();
-                Log.d(TAG, "onSuccess: " + dslist.size());
+              //  Log.d(TAG, "onSuccess: " + dslist.size());
                 usercodes.clear();
                 for (DocumentSnapshot d : dslist) {
                     if (d.getId().equals(mFirebaseAuth.getCurrentUser().getUid())) {
@@ -63,7 +63,8 @@ public class GroupListRepository {
                     public void onSuccess(QuerySnapshot value) {
                         mGroupList.clear();
                         List<DocumentSnapshot> dsList = value.getDocuments();
-                        Log.d(TAG, "2nd: " + dsList.size());
+                      //  Log.d(TAG, "2nd: " + dsList.size());
+                        Log.d(TAG,mFirebaseAuth.getCurrentUser().getDisplayName()+"|||");
                         for (DocumentSnapshot d : dsList) {
                             GroupItem group = d.toObject(GroupItem.class);
                             String code = group.getCode();
@@ -75,8 +76,8 @@ public class GroupListRepository {
                                 }
                             }
                         }
-                        Log.d(TAG, "2nd grp: " + mGroupList.size());
-                        Log.d(TAG, "getMutableGroupListLiveData:" + mGroupList.size());
+                     //   Log.d(TAG, "2nd grp: " + mGroupList.size());
+                    //   Log.d(TAG, "getMutableGroupListLiveData:" + mGroupList.size());
                         mutableGroupListLiveData.postValue(mGroupList);
                     }
                 });

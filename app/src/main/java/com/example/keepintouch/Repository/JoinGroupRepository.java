@@ -1,10 +1,12 @@
 package com.example.keepintouch.Repository;
 
 import android.app.Application;
+import android.location.Location;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.example.keepintouch.Model.GroupItem;
+import com.example.keepintouch.Model.MyLocation;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -27,12 +29,13 @@ public class JoinGroupRepository {
     }
     public void JoinGroup(String Code)
     {
+
         ArrayList<String> codes = new ArrayList<>();
         mFirebaseFirestore.collection("Groups").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 if (queryDocumentSnapshots.isEmpty()) {
-                    Log.d("", "onSuccess : No Grpup Found!");
+                   // Log.d("", "onSuccess : No Grpup Found!");
                     return;
                 }
                 String groupId = null;
@@ -53,6 +56,9 @@ public class JoinGroupRepository {
                 String userId = mFirebaseAuth.getCurrentUser().getUid();
                 mFirebaseFirestore.collection("Group'sCode").document(userId).update("CodeList", FieldValue.arrayUnion(Code));
                 mFirebaseFirestore.collection("Zone").document(groupId).update("memberList",FieldValue.arrayUnion(userId));
+                MyLocation location = new MyLocation(userId,new Location(""));
+                mFirebaseFirestore.collection("Zone").document(groupId).collection("memberList").document(userId).set(location);
+
 
             }
 

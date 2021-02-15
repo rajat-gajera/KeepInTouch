@@ -26,7 +26,7 @@ public class GroupListViewModel extends ViewModel {
             @Override
             public void onChanged(List<GroupItem> groupItems) {
 
-                         Log.d(TAG, "onChangedViewmodel: ");
+                       //  Log.d(TAG, "onChangedViewmodel: ");
                         groupItemList.postValue(groupItems);
 
 

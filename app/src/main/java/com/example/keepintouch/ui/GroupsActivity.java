@@ -42,11 +42,9 @@ public class GroupsActivity extends Fragment {
     private ArrayList<GroupItem> mGroupList = new ArrayList<>();
     private RecyclerView mRecyclerView;
     public GroupAdapter mAdapter;
-    private ProgressDialog progressDialog;
-    private final FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
-    private FirebaseFirestore mFirebaseFirestore = FirebaseFirestore.getInstance();
+    private String currentgroupid=null;
     private FloatingActionButton mJoinButton, mCreateGroupButton;
-
+    private static  GroupsActivity INSTANCE;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -54,7 +52,7 @@ public class GroupsActivity extends Fragment {
 
         View rootview = inflater.inflate(R.layout.fragment_groups, container, false);
 
-        Log.d(TAG, "onCreateView: ");
+        //Log.d(TAG, "onCreateView: ");
         mRecyclerView = rootview.findViewById(R.id.recyclerView);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mAdapter = new GroupAdapter(mGroupList);
@@ -63,12 +61,12 @@ public class GroupsActivity extends Fragment {
 
         mJoinButton = rootview.findViewById(R.id.join_button);
         mCreateGroupButton = rootview.findViewById(R.id.create_button);
-
+        INSTANCE = this;
         GroupListViewModel groupListViewModel = new ViewModelProvider(this).get(GroupListViewModel.class);
         groupListViewModel.groupItemList.observe(getActivity(), new Observer<List<GroupItem>>() {
             @Override
             public void onChanged(List<GroupItem> groupItems) {
-                Log.d(TAG, "onChanged: " + groupItems.size());
+            //    Log.d(TAG, "onChanged: " + groupItems.size());
                 mGroupList = (ArrayList<GroupItem>) groupItems;
                 mAdapter.setList(groupItems);
                 mAdapter.notifyDataSetChanged();
@@ -89,11 +87,11 @@ public class GroupsActivity extends Fragment {
         mCreateGroupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG,"Creating Group");
+              //  Log.d(TAG,"Creating Group");
                 CreateGroupDialogBox createGroupDialogBox = new CreateGroupDialogBox();
                 createGroupDialogBox.show(getFragmentManager(), "Create Group");
                 groupListViewModel.getGroupData();
-                Log.d(TAG,"Created Group");
+              // Log.d(TAG,"Created Group");
 
                 mAdapter.notifyDataSetChanged();
 
@@ -117,8 +115,15 @@ public class GroupsActivity extends Fragment {
 
         return rootview;
     }
-
-
+    public static GroupsActivity getGroupsActivityInstance()
+    {
+        return INSTANCE;
+    }
+    public String getCurrentgroupid()
+    {
+        return this.currentgroupid;
+    }
+    public void setCurrentgroupid(String cid){currentgroupid=cid;}
 
 
 }
