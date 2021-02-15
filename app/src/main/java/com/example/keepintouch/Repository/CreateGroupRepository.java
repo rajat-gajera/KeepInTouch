@@ -39,7 +39,7 @@ public class CreateGroupRepository {
         mFirebaseFirestore.collection("Group'sCode").document(mFirebaseAuth.getCurrentUser().getUid()).update("CodeList", FieldValue.arrayUnion(Code));
         ArrayList<String> mlist= new ArrayList<>();
         mlist.add(AdminId);
-        mFirebaseFirestore.collection("Zone").document(GroupId).set(new Zone(GroupId,Code,"0","0","0",mlist));
+        mFirebaseFirestore.collection("Zone").document(GroupId).set(new Zone(GroupId,Code,"0","0","0",mlist,AdminId));
         mFirebaseFirestore.collection("Zone").document(GroupId).collection("memberList").document(AdminId).set(new MyLocation(AdminId,new Location("")));
 
         Toast.makeText(application,"Group Created.",Toast.LENGTH_SHORT).show();

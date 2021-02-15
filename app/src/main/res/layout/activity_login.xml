@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".ui.LoginActivity"
     android:orientation="vertical"
-    android:gravity="center">
+    android:gravity="center"
+    >
 
 
    <EditText
@@ -16,6 +17,7 @@
         android:hint="@string/email"
        android:inputType="textEmailAddress"
         android:layout_margin="12dp"
+
        />
     <EditText
 
@@ -32,6 +34,8 @@
         android:text="@string/log_in"
         android:id="@+id/login_btn"
         android:layout_margin="12dp"
+
+
 
         />
     <TextView

@@ -6,11 +6,13 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentActivity;
 
 
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,6 +30,8 @@ import com.example.keepintouch.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -61,6 +65,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Button setRadiusBtn;
     private Boolean flag=false;
     private Integer Radius=0;
+    private Double Latitude=0.0;
+    private Double Longitude=0.0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,7 +93,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //Log.d(TAG,flag+"");
         if(flag==true)
         {
-           // Log.d(TAG,"Can Set Radius! ");
+//            Log.d(TAG,"Can Set Radius! ");
             Toast.makeText(this,"Can Set Radius! ",Toast.LENGTH_SHORT).show();
 
         }
@@ -146,10 +152,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void setRadiusLatiLong() {
         Radius = Integer.parseInt(radiusTextView.getText().toString());
+        String AdminId = firebaseAuth.getCurrentUser().getUid();
+        final User[] Admin = {null};
+        String lati,longi;
+        mFirebaseFirestore.collection("Users").document(AdminId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                Admin[0] = task.getResult().toObject(User.class);
+                String lati= Admin[0].getLatitude();
+                String longi = Admin[0].getLogitude();
+                mFirebaseFirestore.collection("Zone").document(currentGroupId).update("radius",Radius.toString(),"latitude",lati,"longitude",longi);
+                mFirebaseFirestore.collection("Groups").document(currentGroupId).update("radius",Radius.toString());
+                Latitude = Double.parseDouble(lati);
+                Longitude =  Double.parseDouble(longi);
+                Circle circle = mMap.addCircle(new CircleOptions()
+                        .center(new LatLng(Double.parseDouble(lati), Double.parseDouble(longi)))
+                        .radius(Radius)
+                        .strokeColor(Color.RED)
+                        .fillColor(Color.BLUE));
+                Log.d(TAG,"Circle Drawan!!");
+            }
+        });
 
-        // mFirebaseFirestore.collection("Zone").document(currentGroupId).update("radius",Radius.toString(),"latitude",lati,"longitude",longi);
-        mFirebaseFirestore.collection("Groups").document(currentGroupId).update("radius",Radius.toString());
+
         Toast.makeText(MapsActivity.this,"Radius Set : "+Radius,Toast.LENGTH_LONG).show();
+    }
+
+    private void DrawCircle(String lati, String longi, Integer radius) {
+
     }
 
     /**
@@ -172,6 +202,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                 IdName.clear();
                 Zone zone = value.toObject(Zone.class);
+                Latitude = Double.parseDouble(zone.getLatitude());
+                Longitude = Double.parseDouble(zone.getLongitude());
+                Radius = Integer.parseInt(zone.getRadius());
                 ArrayList<String> mIdList = zone.getMemberList();
                 mFirebaseFirestore.collection("Users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -187,37 +220,45 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 }
                             }
                         }
+
+        // Add a marker in Sydney and move the camera
+        ArrayList<MyLocation> markerList = new ArrayList<MyLocation>();
+        mFirebaseFirestore.collection("Zone").document(currentGroupId).collection("memberList").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+             public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()) {
+
+                    List<DocumentSnapshot> dlist = task.getResult().getDocuments();
+                    markerList.clear();
+                    for (DocumentSnapshot d : dlist) {
+                        markerList.add(d.toObject(MyLocation.class));
+                    }
+                    mMap.clear();
+
+                    Circle circle = mMap.addCircle(new CircleOptions()
+                            .center(new LatLng(Latitude, Longitude))
+                            .radius(Radius)
+                            .strokeColor(Color.BLUE)
+                            .fillColor(R.color.purple_Tr));
+                    for (MyLocation l : markerList) {
+
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+                        String time = dateFormat.format(l.getTime());
+                        LatLng sydney = new LatLng(l.getLatitude(), l.getLongitude());
+                        String name = IdName.get(l.getUserId());
+                        // Log.d(TAG,name);
+                        mMap.addMarker(new MarkerOptions().position(sydney).title(name + "Last Updated:" + time));
+                    }
+
+                }
+            }
+        });
                     }
                 });
             }
-        });
-        // Add a marker in Sydney and move the camera
-        ArrayList<MyLocation> markerList = new ArrayList<MyLocation>();
-        mFirebaseFirestore.collection("Zone").document(currentGroupId).collection("memberList").addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                List<DocumentSnapshot> dlist = value.getDocuments();
-                markerList.clear();
-                for(DocumentSnapshot d : dlist)
-                {
-                    markerList.add(d.toObject(MyLocation.class));
-                }
-                mMap.clear();
-                for(MyLocation l:markerList)
-                {
-
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-                    String time = dateFormat.format(l.getTime());
-                    LatLng sydney = new LatLng(l.getLatitude(), l.getLongitude());
-                    String name = IdName.get(l.getUserId());
-                   // Log.d(TAG,name);
-                    mMap.addMarker(new MarkerOptions().position(sydney).title( name+"Last Updated:"+time));
-                }
-            }
-        });
-
+        }); mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(Latitude, Longitude)));
         //LatLng sydney = new LatLng(-34, 151);
         //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(-34, 151)));
     }
 }
