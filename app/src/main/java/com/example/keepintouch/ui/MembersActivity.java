@@ -1,7 +1,6 @@
 package com.example.keepintouch.ui;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -13,25 +12,22 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.example.keepintouch.Adapter.MemberAdapter;
 import com.example.keepintouch.Model.GroupItem;
 import com.example.keepintouch.Model.User;
-import com.example.keepintouch.Model.Zone;
 import com.example.keepintouch.R;
-import com.example.keepintouch.Repository.MemberListRepository;
 import com.example.keepintouch.ViewModel.MemberListViewModel;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,15 +44,50 @@ public class MembersActivity extends AppCompatActivity {
     ProgressDialog progressDialog ;
      FloatingActionButton mapbutton;
     static MembersActivity INSTANCE;
-     @Override
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater =getMenuInflater();
+        inflater.inflate(R.menu.option_menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId())
+        {
+            case  R.id.group_chat:
+                Intent intent  = new Intent(this, GroupChatActivity.class);
+                intent.putExtra("currentGroupId",currentgroupid);
+                startActivity(intent);
+                return true;
+            case R.id.alarm:
+                return true;
+            case R.id.admin_detail:
+                return true;
+            case R.id.red_zone_member:
+                return true;
+
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
-        mapbutton = findViewById(R.id.mapbutton);
+
+         mapbutton = findViewById(R.id.mapbutton);
+
         progressDialog=new ProgressDialog(this);
         progressDialog.setCancelable(false);
         progressDialog.setTitle("Please Wait");
         progressDialog.setMessage("Loading...");
         progressDialog.show();
         INSTANCE = this;
+
+
+          
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if (savedInstanceState == null) {
             Bundle extra = getIntent().getExtras();
@@ -111,7 +142,8 @@ public class MembersActivity extends AppCompatActivity {
          setFlag();
          setFlag();
 
-        progressDialog.dismiss();
+
+         progressDialog.dismiss();
     }
     public static MembersActivity getMemberActivityInstance()
     {

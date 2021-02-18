@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:title="Red Zone Member"
+        app:showAsAction="always"
+        android:id="@+id/red_zone_member"
+        android:icon="@drawable/ic_baseline_people_24"
+
+        />
+    <item android:title="Group Chat"
+        android:id="@+id/group_chat"
+        android:icon="@drawable/ic_baseline_chat_bubble_outline_24"/>
+    <item android:title="Alarm"
+        android:id="@+id/alarm"
+        android:icon="@drawable/ic_baseline_access_alarm_24"
+        />
+    <item android:title="Admin"
+        android:id="@+id/admin_detail"
+        android:icon="@drawable/ic_admin_"
+        />
+</menu>

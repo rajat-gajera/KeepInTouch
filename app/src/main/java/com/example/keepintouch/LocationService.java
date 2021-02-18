@@ -30,7 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import static com.example.keepintouch.App.CHANNEL_ID;
+import static com.example.keepintouch.App.LOCATION_SERVICE_CHANNEL_ID;
 
 public class LocationService extends Service {
     private FirebaseFirestore mFirebaseFirestore = FirebaseFirestore.getInstance();
@@ -83,7 +83,7 @@ public class LocationService extends Service {
                 0,
                 notificationIntent,
                 0);
-        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+        Notification notification = new NotificationCompat.Builder(this, LOCATION_SERVICE_CHANNEL_ID)
                 .setContentTitle("Keep IN Touch")
                 .setContentText("Location Service")
                 .setSmallIcon(R.drawable.ic_android)
