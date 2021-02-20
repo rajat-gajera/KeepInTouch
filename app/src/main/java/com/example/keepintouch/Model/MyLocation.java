@@ -8,15 +8,24 @@ public class MyLocation {
     Double latitude;
     Double longitude;
     long time;
-
+    boolean isSafe;
     public MyLocation() {
     }
 
-    public MyLocation(String userId, Location l) {
+    public MyLocation(String userId, Location l,boolean isSafe) {
         latitude = l.getLatitude();
         longitude = l.getLongitude();
         time = l.getTime();
         this.userId = userId;
+        this.isSafe = isSafe;
+    }
+
+    public boolean isSafe() {
+        return isSafe;
+    }
+
+    public void setSafe(boolean safe) {
+        isSafe = safe;
     }
 
     public String getUserId() {

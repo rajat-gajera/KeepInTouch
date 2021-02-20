@@ -21,6 +21,8 @@ import com.example.keepintouch.Adapter.MemberAdapter;
 import com.example.keepintouch.Model.GroupItem;
 import com.example.keepintouch.Model.User;
 import com.example.keepintouch.R;
+import com.example.keepintouch.RedZoneMemberActivity;
+import com.example.keepintouch.Repository.RedZoneMemberListRepository;
 import com.example.keepintouch.ViewModel.MemberListViewModel;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -66,6 +68,9 @@ public class MembersActivity extends AppCompatActivity {
             case R.id.admin_detail:
                 return true;
             case R.id.red_zone_member:
+                Intent Rintent  = new Intent(this, RedZoneMemberActivity.class);
+                Rintent.putExtra("currentGroupId",currentgroupid);
+                startActivity(Rintent);
                 return true;
 
 

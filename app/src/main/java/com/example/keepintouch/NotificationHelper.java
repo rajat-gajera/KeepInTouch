@@ -8,7 +8,7 @@ import androidx.core.app.NotificationManagerCompat;
 public class NotificationHelper {
 
 
-    public static void dispalayNotification(Context context) {
+    public static void displayNotification(Context context) {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, MainActivity.ALERT_SERVICE_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_android)
                 .setContentTitle("KeepInTouch")

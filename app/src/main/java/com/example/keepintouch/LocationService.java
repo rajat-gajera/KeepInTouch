@@ -7,24 +7,32 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.media.MediaPlayer;
 import android.os.IBinder;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 
 import com.example.keepintouch.Model.MyLocation;
+import com.example.keepintouch.Model.Zone;
 import com.example.keepintouch.ui.GroupsActivity;
+import com.example.keepintouch.ui.MapsActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -38,6 +46,7 @@ public class LocationService extends Service {
     private static final String TAG = "lct_src_tager";
     private FusedLocationProviderClient mLocationClient;
     private LocationCallback mLocationCallback;
+
 
 
     @Override
@@ -64,9 +73,31 @@ public class LocationService extends Service {
                     Log.d(TAG,l.toString());
                     mFirebaseFirestore.collection("Users").document(mFirebaseAuth.getCurrentUser().getUid()).update("latitude", lati,"logitude", longi,"time", time);
                     String cid = GroupsActivity.getGroupsActivityInstance().getCurrentgroupid();
+
                     if (cid != null) {
-                        MyLocation myLocation = new MyLocation(mFirebaseAuth.getCurrentUser().getUid(),l);
-                        mFirebaseFirestore.collection("Zone").document(cid).collection("memberList").document(mFirebaseAuth.getCurrentUser().getUid()).set(myLocation);
+                        final boolean[] isSafe = {true};
+                        final Zone[] zone = new Zone[1];
+                        mFirebaseFirestore.collection("Zone").whereEqualTo("groupId",cid).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if(task.isSuccessful()) {
+                                    List<DocumentSnapshot> documentSnapshot = task.getResult().getDocuments();
+                                    zone[0] = documentSnapshot.get(0).toObject(Zone.class);
+
+                                    isSafe[0] = calculateDistance(zone[0], l);
+                                    Log.d(TAG, zone[0].toString() + " "+isSafe);
+                                    MyLocation myLocation = new MyLocation(mFirebaseAuth.getCurrentUser().getUid(), l, isSafe[0]);
+                                    mFirebaseFirestore.collection("Zone").document(cid).collection("memberList").document(mFirebaseAuth.getCurrentUser().getUid()).set(myLocation);
+                                    Log.d(TAG, "new Change success");
+                                }
+                                else
+                                {
+                                    Log.d(TAG,"task unSucseess");
+                                }
+                            }
+                        });
+
+
                     }
                 }
 
@@ -126,5 +157,40 @@ public class LocationService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return null;
+    }
+
+    private boolean calculateDistance(Zone zone, Location  location) {
+        if(Double.parseDouble(zone.getRadius()) == 0 ) return true;
+
+        double lat1 = Double.parseDouble(zone.getLatitude());
+        double lat2 = location.getLatitude();
+        double lon1 = Double.parseDouble(zone.getLongitude());
+        double lon2 = location.getLongitude();
+        lon1 = Math.toRadians(lon1);
+        lon2 = Math.toRadians(lon2);
+        lat1 = Math.toRadians(lat1);
+        lat2 = Math.toRadians(lat2);
+
+        // Haversine formula
+        double dlon = lon2 - lon1;
+        double dlat = lat2 - lat1;
+        double a = Math.pow(Math.sin(dlat / 2), 2)
+                + Math.cos(lat1) * Math.cos(lat2)
+                * Math.pow(Math.sin(dlon / 2),2);
+
+        double c = 2 * Math.asin(Math.sqrt(a));
+
+        // Radius of earth in kilometers. Use 3956
+        // for miles
+        double r = 6371;
+
+        // calculate the result
+        Double result = (c * r * 1000);
+        if(result <= Double.parseDouble(zone.getRadius()))
+        {
+            return true;
+        }
+        return false;
+
     }
 }

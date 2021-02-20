@@ -56,7 +56,7 @@ public class JoinGroupRepository {
                 String userId = mFirebaseAuth.getCurrentUser().getUid();
                 mFirebaseFirestore.collection("Group'sCode").document(userId).update("CodeList", FieldValue.arrayUnion(Code));
                 mFirebaseFirestore.collection("Zone").document(groupId).update("memberList",FieldValue.arrayUnion(userId));
-                MyLocation location = new MyLocation(userId,new Location(""));
+                MyLocation location = new MyLocation(userId,new Location(""),true);
                 mFirebaseFirestore.collection("Zone").document(groupId).collection("memberList").document(userId).set(location);
 
 

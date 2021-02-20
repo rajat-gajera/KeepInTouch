@@ -56,8 +56,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Button setRadiusBtn;
     private Boolean flag = false;
     private Integer Radius = 0;
-    private Double Latitude = 0.0;
-    private Double Longitude = 0.0;
+    public Double Latitude = 0.0;
+    public Double Longitude = 0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

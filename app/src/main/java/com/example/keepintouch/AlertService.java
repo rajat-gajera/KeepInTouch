@@ -1,7 +1,5 @@
 package com.example.keepintouch;
 
-import android.app.NotificationManager;
-
 import androidx.annotation.NonNull;
 
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -16,7 +14,8 @@ public class AlertService  extends FirebaseMessagingService {
         {
             String title = remoteMessage.getNotification().getTitle();
             String text = remoteMessage.getNotification().getBody();
-            NotificationHelper.dispalayNotification(getApplicationContext());
+            NotificationHelper.displayNotification(getApplicationContext());
         }
-    }
+
+     }
 }

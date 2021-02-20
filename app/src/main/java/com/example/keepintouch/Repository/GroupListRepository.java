@@ -41,11 +41,6 @@ public class GroupListRepository {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
 
-        //    }
-      //  })
-      //  mFirebaseFirestore.collection("Group'sCode").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-           // @Override
-          //  public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 List<DocumentSnapshot> dslist = queryDocumentSnapshots.getDocuments();
               //  Log.d(TAG, "onSuccess: " + dslist.size());
                 usercodes.clear();

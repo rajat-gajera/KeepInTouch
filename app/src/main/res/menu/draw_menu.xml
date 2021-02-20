@@ -8,6 +8,10 @@
             android:icon="@drawable/ic_groups"
             android:title="@string/groups" />
         <item
+            android:id="@+id/emergency"
+            android:icon="@drawable/ic_call"
+            android:title="@string/emergency" />
+        <item
             android:id="@+id/servival_kit"
             android:icon="@drawable/ic_sevival_kit"
             android:title="@string/servival_kit" />

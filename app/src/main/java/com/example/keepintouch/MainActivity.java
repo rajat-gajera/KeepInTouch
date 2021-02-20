@@ -16,22 +16,17 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.example.keepintouch.ui.EmergencyActivity;
 import com.example.keepintouch.ui.GroupsActivity;
 import com.example.keepintouch.ui.LoginActivity;
 import com.example.keepintouch.ui.ServivalKitActivity;
 import com.example.keepintouch.ui.SettingsActivity;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     public static final String ALERT_SERVICE_CHANNEL_ID = "AlertServiceChannel";
@@ -80,9 +75,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getLocationPermission();
         }
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-        {
-            NotificationChannel notificationChannel= new NotificationChannel(ALERT_SERVICE_CHANNEL_ID,ALERT_SERVICE_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel(ALERT_SERVICE_CHANNEL_ID, ALERT_SERVICE_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
             notificationChannel.setDescription(ALERT_SERVICE_CHANNEL_DESC);
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(notificationChannel);
@@ -98,7 +92,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new GroupsActivity()).commit();
                 break;
             case R.id.settings:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new SettingsActivity()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsActivity()).commit();
+                break;
+            case R.id.emergency:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new EmergencyActivity()).commit();
                 break;
             case R.id.servival_kit:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ServivalKitActivity()).commit();
@@ -150,7 +147,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     LOCATION_PERMISSION_REQUEST_CODE);
         }
     }
-
 
 
 }
