@@ -1,4 +1,4 @@
-package com.example.keepintouch;
+package com.example.keepintouch.Locations;
 
 import android.Manifest;
 import android.app.Notification;
@@ -7,7 +7,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.media.MediaPlayer;
 import android.os.IBinder;
 import android.os.Looper;
 import android.util.Log;
@@ -18,10 +17,11 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 
+import com.example.keepintouch.MainActivity;
 import com.example.keepintouch.Model.MyLocation;
 import com.example.keepintouch.Model.Zone;
+import com.example.keepintouch.R;
 import com.example.keepintouch.ui.GroupsActivity;
-import com.example.keepintouch.ui.MapsActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -38,7 +38,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import static com.example.keepintouch.App.LOCATION_SERVICE_CHANNEL_ID;
+import static com.example.keepintouch.Locations.App.LOCATION_SERVICE_CHANNEL_ID;
 
 public class LocationService extends Service {
     private FirebaseFirestore mFirebaseFirestore = FirebaseFirestore.getInstance();
@@ -117,7 +117,7 @@ public class LocationService extends Service {
         Notification notification = new NotificationCompat.Builder(this, LOCATION_SERVICE_CHANNEL_ID)
                 .setContentTitle("Keep IN Touch")
                 .setContentText("Location Service")
-                .setSmallIcon(R.drawable.ic_android)
+                .setSmallIcon(R.drawable.ic_android_official)
                 .setContentIntent(pendingIntent)
                 .build();
         startForeground(1, notification);

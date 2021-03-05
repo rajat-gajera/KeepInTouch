@@ -1,4 +1,4 @@
-package com.example.keepintouch;
+package com.example.keepintouch.Locations;
 
 import android.app.Application;
 import android.app.NotificationChannel;

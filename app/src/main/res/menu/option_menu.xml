@@ -12,9 +12,9 @@
     <item android:title="Group Chat"
         android:id="@+id/group_chat"
         android:icon="@drawable/ic_baseline_chat_bubble_outline_24"/>
-    <item android:title="Alarm"
+    <item android:title="Gallary"
         android:id="@+id/alarm"
-        android:icon="@drawable/ic_baseline_access_alarm_24"
+        android:icon="@drawable/ic_alarm"
         />
     <item android:title="Admin"
         android:id="@+id/admin_detail"

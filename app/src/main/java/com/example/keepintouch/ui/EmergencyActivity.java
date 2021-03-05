@@ -32,16 +32,16 @@ public class EmergencyActivity extends Fragment {
 
 
         ArrayList<EmergencyItem> exampleList=new ArrayList<>();
-        exampleList.add(new EmergencyItem(R.drawable.ic_android1,"Ambulance","108"));
-        exampleList.add(new EmergencyItem(R.drawable.ic_android2,"Police","100"));
-        exampleList.add(new EmergencyItem(R.drawable.ic_android3,"Fire Brigade","101"));
-        exampleList.add(new EmergencyItem(R.drawable.ic_android4,"Women Helpline","1091"));
-        exampleList.add(new EmergencyItem(R.drawable.ic_android5,"Senior Citizen Helpline","1291"));
-        exampleList.add(new EmergencyItem(R.drawable.ic_android6,"Road Accident Emergency Service","1073"));
-        exampleList.add(new EmergencyItem(R.drawable.ic_android7,"Children in Difficult Situation","1098"));
-        exampleList.add(new EmergencyItem(R.drawable.ic_android8,"Rail Accident Emergency Service","1072"));
-        exampleList.add(new EmergencyItem(R.drawable.ic_android9,"Air Ambulance","9540161344"));
-        exampleList.add(new EmergencyItem(R.drawable.ic_android10,"National Emergency Number","112"));
+        exampleList.add(new EmergencyItem(R.drawable.ic_hospital,"Ambulance","108"));
+        exampleList.add(new EmergencyItem(R.drawable.ic_police,"Police","100"));
+        exampleList.add(new EmergencyItem(R.drawable.ic_fire,"Fire Brigade","101"));
+        exampleList.add(new EmergencyItem(R.drawable.ic_prg_women,"Women Helpline","1091"));
+        exampleList.add(new EmergencyItem(R.drawable.ic__single_person,"Senior Citizen Helpline","1291"));
+        exampleList.add(new EmergencyItem(R.drawable.ic_road_accident,"Road Accident Emergency Service","1073"));
+        exampleList.add(new EmergencyItem(R.drawable.ic_child,"Children in Difficult Situation","1098"));
+        exampleList.add(new EmergencyItem(R.drawable.ic_rail,"Rail Accident Emergency Service","1072"));
+        exampleList.add(new EmergencyItem(R.drawable.ic_plane,"Air Ambulance","9540161344"));
+        exampleList.add(new EmergencyItem(R.drawable.ic_national_emergency_number,"National Emergency Number","112"));
 
         mRecyclerView=rootview.findViewById(R.id.emergencyrecyclerView);
         mRecyclerView.setHasFixedSize(true);

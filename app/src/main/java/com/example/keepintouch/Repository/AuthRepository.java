@@ -71,30 +71,28 @@ public class AuthRepository {
 
     public void Register(String email, String name, String phonenumber, String password) {
         mFirebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                                                                                @Override
-                                                                                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                                                                                    if (task.isSuccessful()) {
-                                                                                                        String date = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
-                                                                                                        String time = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    String date = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
+                    String time = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
 
-                                                                                                        User user = new User(mFirebaseAuth.getCurrentUser().getUid(), name, phonenumber, email, password, date, time, "0", "0");
-                                                                                                        mFirebaseFirestore.collection("Users").document(user.getUserId()).set(user);
+                    User user = new User(mFirebaseAuth.getCurrentUser().getUid(), name, phonenumber, email, password, date, time, "0", "0");
+                    mFirebaseFirestore.collection("Users").document(user.getUserId()).set(user);
+                    Map<String, Object> mp = new HashMap<>();
+                    ArrayList<String> c = new ArrayList<>();
+                    mp.put("CodeList", c);
+                    mFirebaseFirestore.collection("Group'sCode").document(mFirebaseAuth.getCurrentUser().getUid()).set(mp);
+                    userMutableLiveData.postValue(mFirebaseAuth.getCurrentUser());
+                    Email = email;
+                    saveToken();
 
-                                                                                                        Map<String, Object> mp = new HashMap<>();
-                                                                                                        ArrayList<String> c = new ArrayList<>();
-                                                                                                        mp.put("CodeList", c);
-                                                                                                        mFirebaseFirestore.collection("Group'sCode").document(mFirebaseAuth.getCurrentUser().getUid()).set(mp);
-                                                                                                        userMutableLiveData.postValue(mFirebaseAuth.getCurrentUser());
-                                                                                                        Email = email;
+                } else {
 
-                                                                                                        saveToken();
-
-                                                                                                    } else {
-
-                                                                                                        Toast.makeText(application, "Failed to Register!", Toast.LENGTH_SHORT).show();
-                                                                                                    }
-                                                                                                }
-                                                                                            }
+                    Toast.makeText(application, "Failed to Register!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
         );
 
     }

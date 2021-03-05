@@ -1,16 +1,11 @@
 package com.example.keepintouch.ViewModel;
 
-import android.app.Application;
-import android.util.Log;
-
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
-import com.example.keepintouch.App;
 import com.example.keepintouch.Model.User;
  import com.example.keepintouch.Repository.MemberListRepository;
-import com.example.keepintouch.ui.MembersActivity;
 
 import java.util.List;
 

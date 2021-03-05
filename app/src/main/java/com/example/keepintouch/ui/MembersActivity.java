@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -21,8 +22,6 @@ import com.example.keepintouch.Adapter.MemberAdapter;
 import com.example.keepintouch.Model.GroupItem;
 import com.example.keepintouch.Model.User;
 import com.example.keepintouch.R;
-import com.example.keepintouch.RedZoneMemberActivity;
-import com.example.keepintouch.Repository.RedZoneMemberListRepository;
 import com.example.keepintouch.ViewModel.MemberListViewModel;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -59,6 +58,7 @@ public class MembersActivity extends AppCompatActivity {
         switch (item.getItemId())
         {
             case  R.id.group_chat:
+                Log.d(TAG,currentgroupid+ "this is current group id:");
                 Intent intent  = new Intent(this, GroupChatActivity.class);
                 intent.putExtra("currentGroupId",currentgroupid);
                 startActivity(intent);
@@ -66,8 +66,13 @@ public class MembersActivity extends AppCompatActivity {
             case R.id.alarm:
                 return true;
             case R.id.admin_detail:
+                Intent adminIntent = new Intent(this, AdminDetailsActivity.class);
+                adminIntent.putExtra("currentGroupId",currentgroupid);
+                startActivity(adminIntent);
                 return true;
             case R.id.red_zone_member:
+                Log.d(TAG,currentgroupid+ "this is current group id:");
+
                 Intent Rintent  = new Intent(this, RedZoneMemberActivity.class);
                 Rintent.putExtra("currentGroupId",currentgroupid);
                 startActivity(Rintent);
@@ -139,7 +144,11 @@ public class MembersActivity extends AppCompatActivity {
         mMemberAdapter.setOnItemClickListener(new MemberAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                ////////////////////////////////////
+                User item=mMemberList.get(position);
+                Intent intent=new Intent(Intent.ACTION_CALL);
+                intent.setData(Uri.parse("tel:"+item.getPhone()));
+                getMemberActivityInstance().startActivity(intent);
+//                getApplicationContext().startActivity(intent);
             }
         });
 

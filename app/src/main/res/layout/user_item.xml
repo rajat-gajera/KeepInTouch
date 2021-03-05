@@ -43,6 +43,18 @@
             android:layout_marginStart="8dp"
 
             />
+
+        <ImageView
+            android:id="@+id/member_call_icon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:text="call"
+            android:src="@drawable/ic_call"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="7dp"
+            android:layout_alignParentRight="true" />
+
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

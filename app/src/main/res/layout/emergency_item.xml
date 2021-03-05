@@ -16,7 +16,7 @@
             android:id="@+id/emergencyImageView"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/ic_android"
+            android:src="@drawable/ic_android_official"
             android:padding="2dp" />
 
         <TextView

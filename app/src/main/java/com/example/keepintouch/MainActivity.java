@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,13 +21,19 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.example.keepintouch.Locations.LocationService;
 import com.example.keepintouch.ui.EmergencyActivity;
+import com.example.keepintouch.ui.FaqsFragment;
 import com.example.keepintouch.ui.GroupsActivity;
 import com.example.keepintouch.ui.LoginActivity;
-import com.example.keepintouch.ui.ServivalKitActivity;
+import com.example.keepintouch.ui.SurvivalKitActivity;
 import com.example.keepintouch.ui.SettingsActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     public static final String ALERT_SERVICE_CHANNEL_ID = "AlertServiceChannel";
@@ -41,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TextView mUserEId;
     FirebaseAuth mFirebaseAuth;
     DrawerLayout drawer;
-
+    private ApiInterface apiService;/////////////////
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +58,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         startService(locationintent);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        apiService =Client.getClient("https://fcm.googleapis.com/").create(ApiInterface.class);///////////
+
 
         drawer = findViewById(R.id.draw_layout);
         NavigationView navigationView = findViewById(R.id.navigation_view);
@@ -98,18 +108,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new EmergencyActivity()).commit();
                 break;
             case R.id.servival_kit:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ServivalKitActivity()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SurvivalKitActivity()).commit();
                 break;
             case R.id.share:
-                Toast.makeText(this, "Share", Toast.LENGTH_SHORT).show();
+                    sendNotification("fEU_6J2UT1-Waqo-QeUnjg:APA91bHTS6N4FccJrcdu0h_SuQmURnm6PJx9Hm7QwMlf2Er2PA09eQiTwzLqQvGd0awLwG6UvQOXGX5eY-XjifwWOZKuY4GD9JnZ_qW2bUqZYO0_E2f2EH6XwKrnQ-cV4nPuJZ80Sewo","raja","gajera");
+                     Toast.makeText(this, "Share", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.faqs:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FaqsFragment()).commit();
+                break;
+
             case R.id.log_out:
                 mFirebaseAuth.signOut();
-                Intent locationintent = new Intent(this, LocationService.class);
-                stopService(locationintent);
+                Intent logoutintent = new Intent(this, LocationService.class);
+                logoutintent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                stopService(logoutintent);
                 finish();
                 startActivity(new Intent(this, LoginActivity.class));
                 break;
+
+
 
         }
         drawer.closeDrawer(GravityCompat.START);
@@ -148,5 +166,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    public void sendNotification(String userToken, String title,String message)
+    {
+        Data data = new Data(title,message);
+        NotificationSender sender = new NotificationSender(data,userToken);
+        apiService.sendNotification(sender).enqueue(new Callback<MyNotification>() {
+            @Override
+            public void onResponse(Call<MyNotification> call, Response<MyNotification> response) {
+                if(response.code()==200)
+                if(response.body().success!=1)
+                {
+                    Toast.makeText(MainActivity.this,"Doesn't send",Toast.LENGTH_SHORT).show();
+                }
+                Log.d(TAG,response.code()+"/////////////////////////");
+                Toast.makeText(MainActivity.this,"ssssssssend",Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onFailure(Call<MyNotification> call, Throwable t) {
+                Toast.makeText(MainActivity.this,"failed Doesn't send",Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+    }
 
 }
+

@@ -1,10 +1,7 @@
 package com.example.keepintouch.ui;
 
-import android.app.Application;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,24 +11,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.keepintouch.Adapter.GroupAdapter;
-import com.example.keepintouch.MainActivity;
 import com.example.keepintouch.Model.GroupItem;
 import com.example.keepintouch.R;
 import com.example.keepintouch.ViewModel.GroupListViewModel;
 import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +41,7 @@ public class GroupsActivity extends Fragment {
         View rootview = inflater.inflate(R.layout.fragment_groups, container, false);
 
         //Log.d(TAG, "onCreateView: ");
-        mRecyclerView = rootview.findViewById(R.id.recyclerView);
+        mRecyclerView = rootview.findViewById(R.id.fragment_group_recyclerView);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mAdapter = new GroupAdapter(mGroupList);
         mRecyclerView.setAdapter(mAdapter);
