@@ -86,7 +86,9 @@ public class GroupChatActivity extends AppCompatActivity {
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mMessageAdapter = new MessageAdapter(mMessageList);
         mRecyclerView.setAdapter(mMessageAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getParent()));
+              LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setStackFromEnd(true);
+        mRecyclerView.setLayoutManager(layoutManager);
 //
 //        GroupChatViewModel groupChatViewModel = new ViewModelProvider(this).get(GroupChatViewModel.class);
 //        groupChatViewModel.groupMessageList.observe(this, new Observer<List<Message>>() {

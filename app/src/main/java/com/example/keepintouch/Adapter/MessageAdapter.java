@@ -3,6 +3,8 @@ package com.example.keepintouch.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,7 +21,6 @@ public class MessageAdapter  extends RecyclerView.Adapter<MessageAdapter.Message
 
     private ArrayList<Message> mMessageList = null;
 
-
     public void setList(List<Message> messages) {
         mMessageList = (ArrayList<Message>) messages;
 
@@ -29,6 +30,7 @@ public class MessageAdapter  extends RecyclerView.Adapter<MessageAdapter.Message
 
     public static class MessageViewHolder extends RecyclerView.ViewHolder
     {   public TextView  mMessageText,mSenderText;
+        public LinearLayout itemBody;
 
 
         public MessageViewHolder(@NonNull View itemView ) {
@@ -56,6 +58,7 @@ public class MessageAdapter  extends RecyclerView.Adapter<MessageAdapter.Message
         //System.out.println(currentMember.getName());
         holder.mMessageText.setText(currentMessage.getText());
         holder.mSenderText.setText(currentMessage.getName());
+        
     }
 
     @Override

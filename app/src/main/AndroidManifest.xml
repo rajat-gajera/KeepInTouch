@@ -55,7 +55,7 @@
             android:theme="@style/Theme.KeepInTouch.NoActionBar" />
 
         <service android:name=".Locations.LocationService" />
-        <service android:name=".AlertService">
+        <service android:name=".Notification.AlertService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>

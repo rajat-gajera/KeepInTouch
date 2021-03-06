@@ -45,7 +45,7 @@
             android:id="@+id/radius_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Radius"
+            android:hint="Radius(meter)"
             android:inputType="number"/>
         <Button
             android:id="@+id/set_radius_btn"

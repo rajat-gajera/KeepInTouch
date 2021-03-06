@@ -17,9 +17,14 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 
+import com.example.keepintouch.Notification.ApiInterface;
+import com.example.keepintouch.Notification.Client;
+import com.example.keepintouch.Notification.Data;
 import com.example.keepintouch.MainActivity;
 import com.example.keepintouch.Model.MyLocation;
 import com.example.keepintouch.Model.Zone;
+import com.example.keepintouch.Notification.MyNotification;
+import com.example.keepintouch.Notification.NotificationSender;
 import com.example.keepintouch.R;
 import com.example.keepintouch.ui.GroupsActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -30,6 +35,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -37,6 +43,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.example.keepintouch.Locations.App.LOCATION_SERVICE_CHANNEL_ID;
 
@@ -46,12 +56,14 @@ public class LocationService extends Service {
     private static final String TAG = "lct_src_tager";
     private FusedLocationProviderClient mLocationClient;
     private LocationCallback mLocationCallback;
-
-
+    private ApiInterface apiService;
+    private FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
 
     @Override
     public void onCreate() {
         super.onCreate();
+        apiService = Client.getClient("https://fcm.googleapis.com/").create(ApiInterface.class);///////////
+
         mLocationClient = LocationServices.getFusedLocationProviderClient(getApplicationContext());
          mLocationCallback = new LocationCallback() {
             @Override
@@ -62,8 +74,7 @@ public class LocationService extends Service {
                 }
 
                 List<Location> locationList = locationResult.getLocations();
-              //  Log.d(TAG, "LocationResultget" + locationList.toString());
-                // Toast.makeText(getApplicationContext(),""+locationList.toString(),Toast.LENGTH_SHORT).show();
+
                 for (Location l : locationList) {
                     String lati = Double.toString(l.getLatitude());
                     String longi = Double.toString(l.getLongitude());
@@ -190,7 +201,38 @@ public class LocationService extends Service {
         {
             return true;
         }
+
+        sendNotification("fims-qcNRDWV8wk1CuKKRz:APA91bGPHPNvh0I9-9DKKyVWWtPSUPvjlkiDqSMVzPVW66KrOUgShepFONSrhKLHINS6ETJqzF18d9BJNhIwQB733i348pysvnSDqun4G2AB6wfT2dn8A0udBh11HFTgdyNOSywBb_KA","raja","gajera");
+
         return false;
+
+    }
+
+
+    public void sendNotification(String userToken, String title,String message)
+    {
+
+        Data data = new Data(title,message);
+        NotificationSender sender = new NotificationSender(userToken,data,data);
+
+        apiService.sendNotification(sender).enqueue(new Callback<MyNotification>() {
+            @Override
+            public void onResponse(Call<MyNotification> call, Response<MyNotification> response) {
+                if(response.code()==200)
+                    if(response.body().success!=1)
+                    {
+                        Toast.makeText(getApplicationContext(),"Doesn't send",Toast.LENGTH_SHORT).show();
+                    }
+                Log.d(TAG,response.code()+"/////////////////////////"+ response.toString());
+
+            }
+
+            @Override
+            public void onFailure(Call<MyNotification> call, Throwable t) {
+                Toast.makeText(getApplicationContext(),"failed Doesn't send",Toast.LENGTH_SHORT).show();
+
+            }
+        });
 
     }
 }
