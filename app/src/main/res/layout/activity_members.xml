@@ -3,14 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layoutAnimation="@anim/layout_animation"
+    android:background="@drawable/screenshot__256_">
 
 <androidx.recyclerview.widget.RecyclerView
 
     android:id="@+id/memberrecyclerView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/darker_gray"
+    android:background="@color/white"
     android:padding="7dp"
     android:scrollbars="vertical"
     tools:context=".ui.MembersActivity">
@@ -31,7 +33,11 @@
         android:layout_marginBottom="16dp"
         android:contentDescription="Map"
         android:src="@drawable/ic_baseline_location_searching_24"
-        app:fab_colorNormal="@color/design_default_color_primary"
+        app:fab_colorNormal="@color/button"
+        android:background="@color/button"
+        app:fab_colorDisabled="@color/button"
+        android:outlineAmbientShadowColor="@color/button"
+        android:outlineSpotShadowColor="@color/button"
         app:fab_colorPressed="@color/white"
         app:rippleColor="@color/white"
         android:onClick="openMap"

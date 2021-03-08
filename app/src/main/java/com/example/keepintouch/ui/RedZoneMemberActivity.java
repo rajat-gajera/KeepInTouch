@@ -99,6 +99,10 @@ public class RedZoneMemberActivity extends AppCompatActivity {
 
         progressDialog.dismiss();
     }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 
 
 }

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.keepintouch.Adapter.MemberAdapter;
+import com.example.keepintouch.GalleryActivity;
 import com.example.keepintouch.Model.GroupItem;
 import com.example.keepintouch.Model.User;
 import com.example.keepintouch.R;
@@ -63,7 +65,10 @@ public class MembersActivity extends AppCompatActivity {
                 intent.putExtra("currentGroupId",currentgroupid);
                 startActivity(intent);
                 return true;
-            case R.id.alarm:
+            case R.id.gallery:
+                Intent gallery = new Intent(this, GalleryActivity.class);
+                gallery.putExtra("currentGroupId",currentgroupid);
+                startActivity(gallery);
                 return true;
             case R.id.admin_detail:
                 Intent adminIntent = new Intent(this, AdminDetailsActivity.class);
@@ -117,7 +122,7 @@ public class MembersActivity extends AppCompatActivity {
         //creatememberlist();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_members);
-        setTitle("Members");
+        setTitle("Group Members");
 
 
 

@@ -13,7 +13,7 @@ public class AlertService  extends FirebaseMessagingService {
         {
             String title = remoteMessage.getNotification().getTitle();
             String text = remoteMessage.getNotification().getBody();
-            NotificationHelper.displayNotification(getApplicationContext());
+            NotificationHelper.displayNotification(getApplicationContext(),title,text);
         }
 
      }

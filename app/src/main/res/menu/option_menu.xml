@@ -13,7 +13,7 @@
         android:id="@+id/group_chat"
         android:icon="@drawable/ic_baseline_chat_bubble_outline_24"/>
     <item android:title="Gallary"
-        android:id="@+id/alarm"
+        android:id="@+id/gallery"
         android:icon="@drawable/ic_alarm"
         />
     <item android:title="Admin"

@@ -2,6 +2,7 @@ package com.example.keepintouch.Locations;
 
 import android.Manifest;
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
@@ -17,13 +18,16 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 
+import com.example.keepintouch.MainActivity;
+import com.example.keepintouch.Model.GroupItem;
+import com.example.keepintouch.Model.MyLocation;
+import com.example.keepintouch.Model.Zone;
+import com.example.keepintouch.Model.sUser;
 import com.example.keepintouch.Notification.ApiInterface;
 import com.example.keepintouch.Notification.Client;
 import com.example.keepintouch.Notification.Data;
-import com.example.keepintouch.MainActivity;
-import com.example.keepintouch.Model.MyLocation;
-import com.example.keepintouch.Model.Zone;
 import com.example.keepintouch.Notification.MyNotification;
+import com.example.keepintouch.Notification.NotificationHelper;
 import com.example.keepintouch.Notification.NotificationSender;
 import com.example.keepintouch.R;
 import com.example.keepintouch.ui.GroupsActivity;
@@ -35,13 +39,18 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -58,18 +67,21 @@ public class LocationService extends Service {
     private LocationCallback mLocationCallback;
     private ApiInterface apiService;
     private FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
+    private ArrayList<String> groupIdList = new ArrayList<>();
 
     @Override
     public void onCreate() {
         super.onCreate();
         apiService = Client.getClient("https://fcm.googleapis.com/").create(ApiInterface.class);///////////
 
+        getcodes();
+        Log.d(TAG, "_+++++++++++" + groupIdList.toString());
+
         mLocationClient = LocationServices.getFusedLocationProviderClient(getApplicationContext());
-         mLocationCallback = new LocationCallback() {
+        mLocationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
                 if (locationResult == null) {
-                 //   Log.d(TAG, "onLocationResult:locationError");
                     return;
                 }
 
@@ -79,43 +91,97 @@ public class LocationService extends Service {
                     String lati = Double.toString(l.getLatitude());
                     String longi = Double.toString(l.getLongitude());
                     Date date = new Date(l.getTime());
-                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
                     String time = dateFormat.format(date);
-                    Log.d(TAG,l.toString());
-                    mFirebaseFirestore.collection("Users").document(mFirebaseAuth.getCurrentUser().getUid()).update("latitude", lati,"logitude", longi,"time", time);
+                    Log.d(TAG, l.toString());
+                    mFirebaseFirestore.collection("Users").document(mFirebaseAuth.getCurrentUser().getUid()).update("latitude", lati, "logitude", longi, "time", time);
                     String cid = GroupsActivity.getGroupsActivityInstance().getCurrentgroupid();
 
-                    if (cid != null) {
-                        final boolean[] isSafe = {true};
-                        final Zone[] zone = new Zone[1];
-                        mFirebaseFirestore.collection("Zone").whereEqualTo("groupId",cid).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    Log.d(TAG, "_+++++++++++" + groupIdList.toString());
+                    //===============
+                    for (String gid : groupIdList) {
+                        mFirebaseFirestore.collection("Zone").document(gid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if(task.isSuccessful()) {
-                                    List<DocumentSnapshot> documentSnapshot = task.getResult().getDocuments();
-                                    zone[0] = documentSnapshot.get(0).toObject(Zone.class);
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    Zone currentzone = task.getResult().toObject(Zone.class);
 
-                                    isSafe[0] = calculateDistance(zone[0], l);
-                                    Log.d(TAG, zone[0].toString() + " "+isSafe);
-                                    MyLocation myLocation = new MyLocation(mFirebaseAuth.getCurrentUser().getUid(), l, isSafe[0]);
-                                    mFirebaseFirestore.collection("Zone").document(cid).collection("memberList").document(mFirebaseAuth.getCurrentUser().getUid()).set(myLocation);
-                                    Log.d(TAG, "new Change success");
-                                }
-                                else
-                                {
-                                    Log.d(TAG,"task unSucseess");
+                                    mFirebaseFirestore.collection("Zone").document(gid).collection("memberList").document(mFirebaseAuth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                 MyLocation prevMyLocation = task.getResult().toObject(MyLocation.class);
+                                                boolean prevFlag = prevMyLocation.isSafe();
+                                                boolean cureFlag = calculateDistance(currentzone,l,prevFlag);
+                                                MyLocation myLocation = new MyLocation(mFirebaseAuth.getCurrentUser().getUid(), l, cureFlag);
+                                                mFirebaseFirestore.collection("Zone").document(gid).collection("memberList").document(mFirebaseAuth.getCurrentUser().getUid()).set(myLocation);
+                                                Log.d(TAG, "new Change success");
+                                            }
+                                        }
+                                    });
+
                                 }
                             }
                         });
-
-
                     }
+                    //================
+
+
+//                    if (cid != null) {
+//                        final boolean[] isSafe = {true};
+//                        final Zone[] zone = new Zone[1];
+//                        mFirebaseFirestore.collection("Zone").whereEqualTo("groupId", cid).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                                if (task.isSuccessful()) {
+//                                    List<DocumentSnapshot> documentSnapshot = task.getResult().getDocuments();
+//                                    zone[0] = documentSnapshot.get(0).toObject(Zone.class);
+//
+//                                    isSafe[0] = calculateDistance(zone[0], l,true);
+//                                    Log.d(TAG, zone[0].toString() + " " + isSafe);
+//                                    MyLocation myLocation = new MyLocation(mFirebaseAuth.getCurrentUser().getUid(), l, isSafe[0]);
+//                                    mFirebaseFirestore.collection("Zone").document(cid).collection("memberList").document(mFirebaseAuth.getCurrentUser().getUid()).set(myLocation);
+//                                    Log.d(TAG, "new Change success");
+//                                } else {
+//                                    Log.d(TAG, "task unSucseess");
+//                                }
+//                            }
+//                        });
+//
+//
+//                    }
                 }
 
             }
         };
-       // Log.d(TAG, "OnCreate:location");
+        // Log.d(TAG, "OnCreate:location");
 
+    }
+
+    private void getcodes() {
+        mFirebaseFirestore.collection("Group'sCode").document(mFirebaseAuth.getCurrentUser().getUid()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                HashMap<String, ArrayList<String>> maps = (HashMap<String, ArrayList<String>>) value.toObject(Object.class);
+                ArrayList<String> codes = maps.get("CodeList");
+                //Log.d(TAG,codes.toString());
+                groupIdList.clear();
+                for (String code : codes) {
+                    mFirebaseFirestore.collection("Groups").whereEqualTo("code", code).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            List<DocumentSnapshot> document = task.getResult().getDocuments();
+                            Log.d(TAG,"////////////////////////"+document.toString());
+
+                            for (DocumentSnapshot d : document) {
+                                groupIdList.add(d.toObject(GroupItem.class).getGroupId());
+                                Log.d(TAG, d.toObject(GroupItem.class).getGroupId());
+                            }
+                        }
+                    });
+                }
+            }
+        });
     }
 
     @Override
@@ -160,7 +226,7 @@ public class LocationService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-      //  Log.d(TAG, "onDestroy");
+        //  Log.d(TAG, "onDestroy");
         mLocationClient.removeLocationUpdates(mLocationCallback);
     }
 
@@ -170,8 +236,11 @@ public class LocationService extends Service {
         return null;
     }
 
-    private boolean calculateDistance(Zone zone, Location  location) {
-        if(Double.parseDouble(zone.getRadius()) == 0 ) return true;
+    private boolean calculateDistance(Zone zone, Location location,boolean prevFlag) {
+        boolean curFlag;
+
+        if (Double.parseDouble(zone.getRadius()) == 0)
+        {return true;}
 
         double lat1 = Double.parseDouble(zone.getLatitude());
         double lat2 = location.getLatitude();
@@ -187,7 +256,7 @@ public class LocationService extends Service {
         double dlat = lat2 - lat1;
         double a = Math.pow(Math.sin(dlat / 2), 2)
                 + Math.cos(lat1) * Math.cos(lat2)
-                * Math.pow(Math.sin(dlon / 2),2);
+                * Math.pow(Math.sin(dlon / 2), 2);
 
         double c = 2 * Math.asin(Math.sqrt(a));
 
@@ -197,39 +266,55 @@ public class LocationService extends Service {
 
         // calculate the result
         Double result = (c * r * 1000);
-        if(result <= Double.parseDouble(zone.getRadius()))
-        {
-            return true;
+        if (result <= Double.parseDouble(zone.getRadius())) {
+            curFlag = true;
         }
+        else  curFlag = false;
+//        sendNotification("fims-qcNRDWV8wk1CuKKRz:APA91bGPHPNvh0I9-9DKKyVWWtPSUPvjlkiDqSMVzPVW66KrOUgShepFONSrhKLHINS6ETJqzF18d9BJNhIwQB733i348pysvnSDqun4G2AB6wfT2dn8A0udBh11HFTgdyNOSywBb_KA", "raja", "gajera");
 
-        sendNotification("fims-qcNRDWV8wk1CuKKRz:APA91bGPHPNvh0I9-9DKKyVWWtPSUPvjlkiDqSMVzPVW66KrOUgShepFONSrhKLHINS6ETJqzF18d9BJNhIwQB733i348pysvnSDqun4G2AB6wfT2dn8A0udBh11HFTgdyNOSywBb_KA","raja","gajera");
 
-        return false;
+        if(prevFlag != curFlag && curFlag==false)
+        {
+            String groupName = zone.getGroupName();
+            String adminId = zone.getAdminId();
+            String currnetUserId = mFirebaseAuth.getCurrentUser().getUid();
+             mFirebaseDatabase.getReference("Users").child(adminId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                    if(task.isSuccessful())
+                    {
+                        sUser s = task.getResult().getValue(sUser.class);
+                        sendNotification(s.getToken(),groupName,"Your Group Member is Out Of Zone!!");
+                        NotificationHelper.displayNotification(getApplicationContext(),"KeepInTouch",groupName+": You are Out Of Zone!!");
+                    }
+                }
+            });
+
+        }
+        return  curFlag;
 
     }
 
 
-    public void sendNotification(String userToken, String title,String message)
-    {
+    public void sendNotification(String userToken, String title, String message) {
 
-        Data data = new Data(title,message);
-        NotificationSender sender = new NotificationSender(userToken,data,data);
+        Data data = new Data(title, message);
+        NotificationSender sender = new NotificationSender(userToken, data, data);
 
         apiService.sendNotification(sender).enqueue(new Callback<MyNotification>() {
             @Override
             public void onResponse(Call<MyNotification> call, Response<MyNotification> response) {
-                if(response.code()==200)
-                    if(response.body().success!=1)
-                    {
-                        Toast.makeText(getApplicationContext(),"Doesn't send",Toast.LENGTH_SHORT).show();
+                if (response.code() == 200)
+                    if (response.body().success != 1) {
+                        Toast.makeText(getApplicationContext(), "Doesn't send", Toast.LENGTH_SHORT).show();
                     }
-                Log.d(TAG,response.code()+"/////////////////////////"+ response.toString());
+                Log.d(TAG, response.code() + "/////////////////////////" + response.toString());
 
             }
 
             @Override
             public void onFailure(Call<MyNotification> call, Throwable t) {
-                Toast.makeText(getApplicationContext(),"failed Doesn't send",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "failed Doesn't send", Toast.LENGTH_SHORT).show();
 
             }
         });

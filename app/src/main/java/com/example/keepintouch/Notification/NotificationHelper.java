@@ -13,11 +13,11 @@ public class NotificationHelper {
 
     private static final String TAG = "not_help_tager";
 
-    public static void displayNotification(Context context) {
+    public static void displayNotification(Context context,String title,String body) {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, MainActivity.ALERT_SERVICE_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_android_official)
-                .setContentTitle("KeepInTouch")
-                .setContentText("You are Out Of Zone")
+                .setContentTitle(title)
+                .setContentText( body + "")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
         NotificationManagerCompat mNotificationManagerCompat = NotificationManagerCompat.from(context);
         mNotificationManagerCompat.notify(2, mBuilder.build());

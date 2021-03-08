@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/screenshot__256_"
+    android:layoutAnimation="@anim/layout_animation"
 
     >
 
@@ -12,7 +14,7 @@
         android:id="@+id/fragment_group_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/darker_gray"
+        android:background="@drawable/_20x1520_wallpaper_132_380x802"
         android:padding="7dp"
         android:scrollbars="vertical" />
 

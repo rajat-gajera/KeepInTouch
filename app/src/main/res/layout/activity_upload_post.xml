@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:gravity="center"
+    tools:context=".ui.UploadPostActivity">
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+     >
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:padding="20dp">
+
+            <TextView
+                android:id="@+id/titleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+
+                android:text="Upload"
+
+                android:textSize="40dp" />
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardImg"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_below="@+id/titleText"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+
+                app:cardElevation="10dp">
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                     >
+
+                    <ImageView
+                        android:id="@+id/selectedImg"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop" />
+
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <Button
+                android:id="@+id/btnSelect"
+                android:layout_width="360dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/cardImg"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="25dp"
+
+                android:text="Select Photo"
+                android:textSize="18dp" />
+
+            <EditText
+                android:id="@+id/edtCaption"
+                android:layout_width="360dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/btnSelect"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="14dp"
+
+                android:hint="Add Caption"
+                android:textAlignment="center"
+                android:textSize="18dp" />
+
+            <Button
+                android:id="@+id/btnUpload"
+                android:layout_width="360dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/edtCaption"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp"
+
+                android:text="Upload"
+                android:textColor="#fff"
+                android:textSize="18dp" />
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>

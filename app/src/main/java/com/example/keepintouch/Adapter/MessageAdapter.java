@@ -29,7 +29,7 @@ public class MessageAdapter  extends RecyclerView.Adapter<MessageAdapter.Message
 
 
     public static class MessageViewHolder extends RecyclerView.ViewHolder
-    {   public TextView  mMessageText,mSenderText;
+    {   public TextView  mMessageText,mSenderText,mTime;
         public LinearLayout itemBody;
 
 
@@ -37,7 +37,7 @@ public class MessageAdapter  extends RecyclerView.Adapter<MessageAdapter.Message
             super(itemView);
             mMessageText = itemView.findViewById(R.id.messageTextView);
             mSenderText= itemView.findViewById(R.id.nameTextView);
-
+            mTime = itemView.findViewById(R.id.msg_time);
         }
     }
 
@@ -58,6 +58,7 @@ public class MessageAdapter  extends RecyclerView.Adapter<MessageAdapter.Message
         //System.out.println(currentMember.getName());
         holder.mMessageText.setText(currentMessage.getText());
         holder.mSenderText.setText(currentMessage.getName());
+        holder.mTime.setText(currentMessage.getTime());
         
     }
 

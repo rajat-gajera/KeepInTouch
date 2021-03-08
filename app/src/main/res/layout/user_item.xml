@@ -3,12 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="4dp"
+    app:cardCornerRadius="10dp"
+    android:background="#D0A2FF"
+    android:padding="10dp"
+    android:layout_margin="4dp"
+
     >
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="4dp">
+         android:background="#D0A2FF">
 
         <ImageView
             android:id="@+id/userImageView"
@@ -18,6 +22,7 @@
             android:padding="2dp" />
 
         <TextView
+            android:layout_marginTop="5dp"
             android:id="@+id/user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -28,6 +33,7 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:layout_marginStart="8dp"
+            android:layout_marginBottom="5dp"
             />
 
         <TextView
@@ -36,11 +42,11 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/user_name"
             android:layout_toEndOf="@id/userImageView"
-            android:textColor="@android:color/darker_gray"
-
+            android:textColor="#646464"
             android:text="User Mobile"
             android:textSize="15sp"
             android:layout_marginStart="8dp"
+            android:layout_marginBottom="5dp"
 
             />
 

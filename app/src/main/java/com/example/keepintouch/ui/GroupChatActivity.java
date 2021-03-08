@@ -29,7 +29,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -52,6 +54,7 @@ public class GroupChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_chat);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle("Group Chat");
         Log.d(TAG,currentGroupId+" got curent gorup id  in grup chat actviity" );
 
         if (savedInstanceState == null) {
@@ -131,7 +134,12 @@ public class GroupChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // TODO: Send messages on click
-                Message mMessage =  new Message(mMessageEditText.getText().toString(),"");
+                Calendar c = Calendar.getInstance();
+                SimpleDateFormat df = new SimpleDateFormat("dd-MM-yy HH:mm a");
+                String formattedDate = df.format(c.getTime());
+
+                Message mMessage =  new Message(mMessageEditText.getText().toString(),"",formattedDate);
+
                 if(currentGroupId == null){
                     Log.d(TAG,"Current group Id" + currentGroupId);
                     return;

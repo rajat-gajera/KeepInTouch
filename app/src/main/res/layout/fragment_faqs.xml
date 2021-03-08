@@ -3,17 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.FaqsFragment">
+    android:background="@drawable/screenshot__256_"
+    tools:context=".ui.FaqsFragment"
+    android:layoutAnimation="@anim/layout_animation">
 
 
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/faq_fragment_recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/darker_gray"
-            android:padding="4dp"
-            android:scrollbars="vertical" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/faq_fragment_recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/screenshot__256_"
+        android:padding="4dp"
+        android:scrollbars="vertical" />
 
 </RelativeLayout>
 

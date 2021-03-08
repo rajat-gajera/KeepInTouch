@@ -70,7 +70,8 @@ public class GroupChatRepository {
     public void getMutableLiveMessages(String currentGroupId)
     {
        // mMessageList.clear();
-        mMessageList.add(new Message("Hiiii","KeepInTOuch"));
+        //mMessageList.add(new Message("Hiiii","KeepInTOuch",""));
+
         mDatabaseReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {

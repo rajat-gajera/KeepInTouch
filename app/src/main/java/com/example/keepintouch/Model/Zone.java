@@ -3,7 +3,7 @@ package com.example.keepintouch.Model;
 import java.util.ArrayList;
 
 public class Zone {
-    String groupId,secretcode,latitude,longitude,radius,AdminId;
+    String groupId,secretcode,latitude,longitude,radius,AdminId,groupName;
     ArrayList<String> memberList;
 
     public Zone() {
@@ -11,14 +11,23 @@ public class Zone {
 
 
 
-    public Zone(String groupId, String secretcode, String latitude, String longitude, String radius, ArrayList<String> codeList, String AdminId) {
+    public Zone(String groupId,String groupName, String secretcode, String latitude, String longitude, String radius, ArrayList<String> codeList, String AdminId) {
         this.groupId = groupId;
+        this.groupName = groupName;
         this.secretcode = secretcode;
         this.latitude = latitude;
         this.longitude = longitude;
         this.radius = radius;
         this.memberList = codeList;
         this.AdminId = AdminId;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
 
     public String getGroupId() {

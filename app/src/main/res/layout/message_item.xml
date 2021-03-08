@@ -9,6 +9,7 @@
     android:background="@android:color/darker_gray"
     android:layout_margin="10dp"
     app:cardCornerRadius="15dp"
+    android:outlineSpotShadowColor="@android:color/darker_gray"
 
     >
 
@@ -21,7 +22,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@android:color/darker_gray"
+
 
     >
     <TextView
@@ -32,6 +33,7 @@
         android:layout_marginLeft="7dp"
         android:layout_marginRight="7dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
+
         tools:text="Message" />
 
     <TextView
@@ -44,5 +46,14 @@
         android:layout_weight="0"
         android:textAppearance="?android:attr/textAppearanceSmall"
         tools:text="Name" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="time"
+        android:id="@+id/msg_time"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginBottom="5dp"
+        />
 </LinearLayout>
 </androidx.cardview.widget.CardView>
