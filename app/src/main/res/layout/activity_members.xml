@@ -4,21 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/screenshot__256_"
+    android:layoutAnimation="@anim/layout_animation">
     android:layoutAnimation="@anim/layout_animation"
-    android:background="@drawable/screenshot__256_">
 
-<androidx.recyclerview.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
 
-    android:id="@+id/memberrecyclerView"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    android:padding="7dp"
-    android:scrollbars="vertical"
-    tools:context=".ui.MembersActivity">
+        android:id="@+id/memberrecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/screenshot__256_"
+        android:layoutAnimation="@anim/layout_animation"
+        android:padding="7dp"
+        android:scrollbars="vertical"
+        tools:context=".ui.MembersActivity">
 
 
-</androidx.recyclerview.widget.RecyclerView>
+    </androidx.recyclerview.widget.RecyclerView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/mapbutton"
@@ -31,17 +33,17 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
-        android:contentDescription="Map"
-        android:src="@drawable/ic_baseline_location_searching_24"
-        app:fab_colorNormal="@color/button"
         android:background="@color/button"
-        app:fab_colorDisabled="@color/button"
+        android:contentDescription="Map"
+        android:layoutAnimation="@anim/layout_animation"
+        android:onClick="openMap"
         android:outlineAmbientShadowColor="@color/button"
         android:outlineSpotShadowColor="@color/button"
+        android:src="@drawable/ic_baseline_location_searching_24"
+        app:fab_colorDisabled="@color/button"
+        app:fab_colorNormal="@color/button"
         app:fab_colorPressed="@color/white"
-        app:rippleColor="@color/white"
-        android:onClick="openMap"
-        />
+        app:rippleColor="@color/white" />
 
 
 </RelativeLayout>

@@ -4,15 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/screenshot__256_"
-    tools:context=".ui.FaqsFragment"
-    android:layoutAnimation="@anim/layout_animation">
+    android:layoutAnimation="@anim/layout_animation"
+    tools:context=".ui.FaqsFragment">
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/faq_fragment_recyclerView"
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/screenshot__256_"
+        android:layoutAnimation="@anim/layout_animation"
         android:padding="4dp"
         android:scrollbars="vertical" />
 

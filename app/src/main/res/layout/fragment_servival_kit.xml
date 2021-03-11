@@ -8,6 +8,8 @@
     >
 
     <androidx.recyclerview.widget.RecyclerView
+        android:layoutAnimation="@anim/layout_animation"
+
         android:id="@+id/fragment_survivalkit_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

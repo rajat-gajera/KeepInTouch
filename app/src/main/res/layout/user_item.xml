@@ -4,15 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="10dp"
-    android:background="#D0A2FF"
+    android:background="@color/white"
     android:padding="10dp"
     android:layout_margin="4dp"
+    android:layoutAnimation="@anim/layout_animation"
 
     >
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-         android:background="#D0A2FF">
+        android:background="@color/white">
 
         <ImageView
             android:id="@+id/userImageView"

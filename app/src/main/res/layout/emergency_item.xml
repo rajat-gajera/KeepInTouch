@@ -3,60 +3,71 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="4dp"
-    android:layout_margin="4dp">
+    android:layout_margin="4dp"
+    android:layoutAnimation="@anim/layout_animation"
+    app:cardCornerRadius="4dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
+
         android:layout_height="match_parent"
         android:layout_margin="4dp"
-        android:layout_marginBottom="4dp">
+        android:layout_marginBottom="4dp"
+        android:layoutAnimation="@anim/layout_animation">
 
         <ImageView
             android:id="@+id/emergencyImageView"
+
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/ic_android_official"
-            android:padding="2dp" />
+            android:layoutAnimation="@anim/layout_animation"
+            android:padding="2dp"
+            android:src="@drawable/ic_android_official" />
 
         <TextView
             android:id="@+id/emergencyName"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
             android:layout_toEndOf="@id/emergencyImageView"
+            android:layout_toRightOf="@id/emergencyImageView"
+            android:layoutAnimation="@anim/layout_animation"
             android:text="Emergency Name"
             android:textColor="@android:color/black"
             android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginStart="8dp"
-            android:layout_toRightOf="@id/emergencyImageView"
-            android:layout_marginLeft="8dp" />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/emergencyNumber"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/emergencyName"
-            android:layout_toEndOf="@id/emergencyImageView"
-            android:textColor="@android:color/darker_gray"
-
-            android:text="Emergency Number"
-            android:textSize="15sp"
             android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_toEndOf="@id/emergencyImageView"
 
             android:layout_toRightOf="@id/emergencyImageView"
-            android:layout_marginLeft="8dp" />
+            android:layoutAnimation="@anim/layout_animation"
+            android:text="Emergency Number"
+
+            android:textColor="@android:color/darker_gray"
+            android:textSize="15sp" />
 
         <ImageView
             android:id="@+id/call_icon"
+
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:text="call"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="7dp"
-            android:layout_alignParentRight="true" />
+            android:layoutAnimation="@anim/layout_animation"
+            android:text="call" />
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

@@ -25,7 +25,7 @@ public class FaqsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        getActivity().setTitle("FAQsItem");
+        getActivity().setTitle("FAQs");
         View rootView = inflater.inflate(R.layout.fragment_faqs, container, false);
         ArrayList<FAQsItem> faqlist=new ArrayList<>();
         faqlist.add(new FAQsItem("1. How can i Send message to a Group ?","Just go to dashboard and select message section.\nIn the Message section there is a button on top right corner of the Screen click on that button and you can send messages to Group."));

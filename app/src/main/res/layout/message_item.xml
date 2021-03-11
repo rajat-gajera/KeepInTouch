@@ -10,6 +10,7 @@
     android:layout_margin="10dp"
     app:cardCornerRadius="15dp"
     android:outlineSpotShadowColor="@android:color/darker_gray"
+    android:layoutAnimation="@anim/layout_animation"
 
     >
 
