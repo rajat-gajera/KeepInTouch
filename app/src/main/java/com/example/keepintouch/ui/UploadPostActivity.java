@@ -20,11 +20,15 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.keepintouch.GalleryActivity;
+import com.example.keepintouch.Model.User;
 import com.example.keepintouch.Post;
 import com.example.keepintouch.R;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -40,7 +44,7 @@ public class UploadPostActivity extends AppCompatActivity {
     Button btnSelect,btnUpload;
     EditText edtCaption;
     ImageView selectedImg;
-
+    String name , userId;
     Uri postImgURI;
 
     StorageReference storageReference;
@@ -64,7 +68,14 @@ public class UploadPostActivity extends AppCompatActivity {
         progressDialog.setCancelable(false);
         progressDialog.setTitle("Please Wait");
         progressDialog.setMessage("Loading...");
-
+        userId=FirebaseAuth.getInstance().getCurrentUser().getUid();
+        FirebaseFirestore.getInstance().collection("Users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                User us = task.getResult().toObject(User.class);
+                name = us.getName();
+            }
+        });
         btnSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -106,7 +117,7 @@ public class UploadPostActivity extends AppCompatActivity {
 
                             String caption=edtCaption.getText().toString();
 
-                            Post post=new Post(id,postImgURL.toString(),caption, "name","DashboardActivity.uid",currentDate,currentTime, MembersActivity.getMemberActivityInstance().currentgroupid);
+                            Post post=new Post(id,postImgURL.toString(),caption, name,userId,currentDate,currentTime, MembersActivity.getMemberActivityInstance().currentgroupid);
 
                             firebaseFirestore.collection("Gallery").document("Gallery").collection(MembersActivity.getMemberActivityInstance().currentgroupid).document(id).set(post).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
