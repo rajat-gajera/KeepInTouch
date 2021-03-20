@@ -20,4 +20,8 @@
         android:id="@+id/admin_detail"
         android:icon="@drawable/ic_admin_"
         />
+    <item android:title="Delete Group"
+        android:id="@+id/delete_group"
+        android:icon="@drawable/ic_admin_"
+        />
 </menu>

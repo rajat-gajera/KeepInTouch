@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/screenshot__256_"
+    android:background="#dedede"
     android:layoutAnimation="@anim/layout_animation"
 
     >
@@ -14,7 +14,7 @@
         android:id="@+id/fragment_group_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/screenshot__256_"
+        android:background="#dedede"
         android:padding="7dp"
         android:scrollbars="vertical" />
 
@@ -27,7 +27,7 @@
         android:layout_alignParentBottom="true"
         android:src="@drawable/ic_add_group"
         android:visibility="visible"
-        app:fab_addButtonColorNormal="@color/design_default_color_primary"
+
         app:fab_addButtonColorPressed="@color/black"
         app:fab_addButtonPlusIconColor="@color/white"
         app:fab_labelStyle="@style/custom_fab"

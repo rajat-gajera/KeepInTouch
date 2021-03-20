@@ -13,7 +13,7 @@
         android:id="@+id/fragment_survivalkit_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/screenshot__256_"
+        android:background="#dedede"
         android:padding="4dp"
         android:scrollbars="vertical" />
 

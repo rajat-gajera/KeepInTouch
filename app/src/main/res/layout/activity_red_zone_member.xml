@@ -3,16 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/screenshot__256_"
+    android:background="#dedede"
     android:layoutAnimation="@anim/layout_animation"
-    tools:context=".ui.RedZoneMemberActivity">
+    tools:context=".ui.RedZoneMemberActivity"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/redzonememberrecyclerView"
 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/screenshot__256_"
+        android:background="#dedede"
         android:layoutAnimation="@anim/layout_animation"
         android:padding="7dp"
         android:scrollbars="vertical"

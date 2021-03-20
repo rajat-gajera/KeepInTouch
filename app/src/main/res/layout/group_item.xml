@@ -6,7 +6,8 @@
     android:layout_margin="4dp"
     android:layoutAnimation="@anim/layout_animation"
     app:cardCornerRadius="10dp"
-
+    android:background="#ffffff"
+    android:id="@+id/group_item"
     >
 
     <RelativeLayout

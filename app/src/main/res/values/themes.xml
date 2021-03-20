@@ -2,13 +2,13 @@
     <!-- Base application theme. -->
     <style name="Theme.KeepInTouch" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#625C9F</item>
-        <item name="colorPrimaryVariant">#b392c7</item>
+        <item name="colorPrimary">#000000</item>
+
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
 
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor" tools:targetApi="l">#3d3d3d</item>
         <!-- Customize your theme here. -->
     </style>
 
