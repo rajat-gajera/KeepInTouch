@@ -12,7 +12,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,7 +22,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.keepintouch.Adapter.MemberAdapter;
-import com.example.keepintouch.GalleryActivity;
 import com.example.keepintouch.MainActivity;
 import com.example.keepintouch.Model.GroupItem;
 import com.example.keepintouch.Model.User;

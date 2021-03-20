@@ -23,7 +23,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KeepInTouch">
         <activity android:name=".ui.UploadPostActivity"></activity>
-        <activity android:name=".GalleryActivity" />
+        <activity android:name=".ui.GalleryActivity" />
         <activity android:name=".ui.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

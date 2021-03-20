@@ -1,4 +1,4 @@
-package com.example.keepintouch;
+package com.example.keepintouch.Model;
 
 public class Post {
 

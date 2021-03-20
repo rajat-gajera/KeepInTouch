@@ -1,4 +1,4 @@
-package com.example.keepintouch;
+package com.example.keepintouch.Adapter;
 
 import android.Manifest;
 import android.app.Activity;
@@ -12,8 +12,6 @@ import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -26,6 +24,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.artjimlop.altex.AltexImageDownloader;
 import com.bumptech.glide.Glide;
+import com.example.keepintouch.Model.Post;
+import com.example.keepintouch.R;
+import com.example.keepintouch.ui.GalleryActivity;
 import com.example.keepintouch.ui.MembersActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -92,7 +93,7 @@ public class GalleryListAdapter extends RecyclerView.Adapter<GalleryListAdapter.
                             public void onSuccess(Void aVoid) {
                                 progressDialog.dismiss();
                                 Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show();
-                                Intent intent=new Intent(context,GalleryActivity.class);
+                                Intent intent=new Intent(context, GalleryActivity.class);
                                 context.startActivity(intent);
                                 Activity activity=(Activity)context;
                                 activity.finish();

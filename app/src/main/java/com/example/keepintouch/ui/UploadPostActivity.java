@@ -19,9 +19,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.keepintouch.GalleryActivity;
 import com.example.keepintouch.Model.User;
-import com.example.keepintouch.Post;
+import com.example.keepintouch.Model.Post;
 import com.example.keepintouch.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;

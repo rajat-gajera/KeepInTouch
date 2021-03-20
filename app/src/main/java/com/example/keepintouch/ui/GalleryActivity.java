@@ -1,4 +1,4 @@
-package com.example.keepintouch;
+package com.example.keepintouch.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -11,7 +11,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.keepintouch.ui.UploadPostActivity;
+import com.example.keepintouch.Adapter.GalleryListAdapter;
+import com.example.keepintouch.Model.Post;
+import com.example.keepintouch.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
