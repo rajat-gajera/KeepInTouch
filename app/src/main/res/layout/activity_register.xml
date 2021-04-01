@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/screenshot__256_"
+    android:background="@drawable/image_gradient_theme"
     android:gravity="center"
     android:orientation="vertical"
     tools:context=".ui.RegisterActivity">

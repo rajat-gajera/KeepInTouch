@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/screenshot__252_"
+    android:background="@drawable/splash_screen_image"
     android:layoutAnimation="@anim/layout_animation"
     android:theme="@style/Theme.KeepInTouch.NoActionBar"
     tools:context=".ui.SplashScreenActivity">
