@@ -25,7 +25,7 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GroupsActivity extends Fragment {
+public class GroupsFragment extends Fragment {
 
     private String TAG="grp_frg_tager";
     private ArrayList<GroupItem> mGroupList = new ArrayList<>();
@@ -33,7 +33,7 @@ public class GroupsActivity extends Fragment {
     public GroupAdapter mAdapter;
     private String currentgroupid=null;
     private FloatingActionButton mJoinButton, mCreateGroupButton;
-    private static  GroupsActivity INSTANCE;
+    private static GroupsFragment INSTANCE;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -106,7 +106,7 @@ public class GroupsActivity extends Fragment {
 
         return rootview;
     }
-    public static GroupsActivity getGroupsActivityInstance()
+    public static GroupsFragment getGroupsActivityInstance()
     {
         return INSTANCE;
     }

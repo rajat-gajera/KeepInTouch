@@ -21,7 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class SettingsActivity extends Fragment {
+public class SettingsFragment extends Fragment {
     private static final String TAG = "settings_tager";
     String name, mobile, email, password ;
     FirebaseFirestore mFirbaseFirestore;

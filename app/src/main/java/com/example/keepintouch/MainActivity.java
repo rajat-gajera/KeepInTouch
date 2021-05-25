@@ -8,7 +8,6 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,12 +22,12 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.keepintouch.Locations.LocationService;
-import com.example.keepintouch.ui.EmergencyActivity;
+import com.example.keepintouch.ui.EmergencyFragment;
 import com.example.keepintouch.ui.FaqsFragment;
-import com.example.keepintouch.ui.GroupsActivity;
+import com.example.keepintouch.ui.GroupsFragment;
 import com.example.keepintouch.ui.LoginActivity;
-import com.example.keepintouch.ui.SurvivalKitActivity;
-import com.example.keepintouch.ui.SettingsActivity;
+import com.example.keepintouch.ui.SurvivalKitFragment;
+import com.example.keepintouch.ui.SettingsFragment;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.LocationRequest;
@@ -40,18 +39,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.gson.Gson;
-
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     public static final String ALERT_SERVICE_CHANNEL_ID = "AlertServiceChannel";
@@ -92,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         toggle.syncState();
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new GroupsActivity()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new GroupsFragment()).commit();
             navigationView.setCheckedItem(R.id.groups);
 
         }
@@ -116,16 +103,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         switch (item.getItemId()) {
             case R.id.groups:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new GroupsActivity()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new GroupsFragment()).commit();
                 break;
             case R.id.settings:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsActivity()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
                 break;
             case R.id.emergency:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new EmergencyActivity()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new EmergencyFragment()).commit();
                 break;
             case R.id.servival_kit:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SurvivalKitActivity()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SurvivalKitFragment()).commit();
                 break;
             case R.id.share:
                 Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);

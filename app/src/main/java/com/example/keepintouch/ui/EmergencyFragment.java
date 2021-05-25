@@ -19,7 +19,7 @@ import com.example.keepintouch.R;
 
 import java.util.ArrayList;
 
-public class EmergencyActivity extends Fragment {
+public class EmergencyFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private EmergencyAdapter mAdapter;

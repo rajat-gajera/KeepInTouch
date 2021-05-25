@@ -167,7 +167,7 @@ public class MembersActivity extends AppCompatActivity {
             currentgroupid = (String) savedInstanceState.getSerializable("groupId");
 
         }
-      GroupsActivity.getGroupsActivityInstance().setCurrentgroupid(currentgroupid);
+      GroupsFragment.getGroupsActivityInstance().setCurrentgroupid(currentgroupid);
         mMemberList = new ArrayList<>();
         //creatememberlist();
         super.onCreate(savedInstanceState);

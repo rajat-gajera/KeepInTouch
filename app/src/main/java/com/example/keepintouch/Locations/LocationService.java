@@ -2,7 +2,6 @@ package com.example.keepintouch.Locations;
 
 import android.Manifest;
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
@@ -30,7 +29,7 @@ import com.example.keepintouch.Notification.MyNotification;
 import com.example.keepintouch.Notification.NotificationHelper;
 import com.example.keepintouch.Notification.NotificationSender;
 import com.example.keepintouch.R;
-import com.example.keepintouch.ui.GroupsActivity;
+import com.example.keepintouch.ui.GroupsFragment;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -95,7 +94,7 @@ public class LocationService extends Service {
                     String time = dateFormat.format(date);
                     Log.d(TAG, l.toString());
                     mFirebaseFirestore.collection("Users").document(mFirebaseAuth.getCurrentUser().getUid()).update("latitude", lati, "logitude", longi, "time", time);
-                    String cid = GroupsActivity.getGroupsActivityInstance().getCurrentgroupid();
+                    String cid = GroupsFragment.getGroupsActivityInstance().getCurrentgroupid();
 
 
                     for (String gid : groupIdList) {

@@ -18,7 +18,7 @@ import com.example.keepintouch.R;
 import java.util.ArrayList;
 
 
-public class SurvivalKitActivity extends Fragment {
+public class SurvivalKitFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private SurvivalKitAdapter mAdapter;
