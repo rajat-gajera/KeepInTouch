@@ -18,7 +18,7 @@
     <string name="navigation_drawer_close">Close navigatin drawer</string>
     <string name="title_activity_maps">Map</string>
     <string name="emergency">Emergency</string>
-    <string name="FCM_Auth_KEY">AAAAxfUQTqo:APA91bF5w3CLVh4IE6Rkert2TEYmQtG6jENdRW0MAhfcKxvfXLx9Ay4z5lBwRmgtXMKklcxRSydeoQ2nBnatsN6gB8WTfDnglrTJSkQfWYMmoWh4r_YtGI-AoJ6HXYnH6ERUzi90b8sD</string>
+    <string name="FCM_Auth_KEY">--------------------------</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="faqs">FAQs</string>
